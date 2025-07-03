@@ -7,6 +7,7 @@ import SettingsModal from "./SettingsModal";
 import BackgroundCropperModal from "./BackgroundCropperModal";
 import { toPng } from "html-to-image";
 import { saveAs } from "file-saver";
+import html2canvas from "html2canvas";
 
 // helper to convert hex color to rgba with transparency
 function hexToRgba(hex, alpha = 0.5) {
@@ -16,6 +17,9 @@ function hexToRgba(hex, alpha = 0.5) {
 
 const headerHeight = 40;
 const initialHours = Array.from({ length: 13 }, (_, i) => 7 + i);
+
+const isSafari = () =>
+  /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
 function App() {
   const [device, setDevice] = useState(null);
@@ -174,20 +178,37 @@ function App() {
   }
 
   async function downloadTimetable(e) {
-    if (e && e.preventDefault) e.preventDefault();
+    e?.preventDefault();
     if (!timetableRef.current || !device) return;
-    const scale = device.width / gridWidth;
+
     try {
-      const dataUrl = await toPng(timetableRef.current, {
-        cacheBust: true,
-        pixelRatio: scale
-      });
-      saveAs(dataUrl, "timetable.png");
+      const scale = device.width / gridWidth;
+
+      if (isSafari()) {
+        // — Safari fallback with html2canvas at high res —
+        const canvas = await html2canvas(timetableRef.current, {
+          useCORS: true,
+          backgroundColor: "#fff",  // fill behind transparent areas
+          scale,                    // CSS-pixels × scale → real pixels
+        });
+        const dataUrl = canvas.toDataURL("image/png");
+        saveAs(dataUrl, "timetable.png");
+
+      } else {
+        // — default path with html-to-image —
+        const dataUrl = await toPng(timetableRef.current, {
+          cacheBust: true,
+          pixelRatio: scale,        // same scale factor
+        });
+        saveAs(dataUrl, "timetable.png");
+      }
+
     } catch (err) {
       console.error("Export failed:", err);
       alert("Export failed: " + (err.message || err));
     }
   }
+
 
   return (
     <div className="min-h-screen flex flex-col items-center bg-gray-100">
@@ -234,13 +255,6 @@ function App() {
             selectedDays={selectedDays}
             setSelectedDays={days => setSelectedDays(sortDays(days))}
           />
-
-          <button
-            className="mb-2 px-4 py-2 bg-green-600 text-white rounded"
-            onClick={() => setShowModal(true)}
-          >
-            + Add Class
-          </button>
 
           {/* Hour controls */}
           <div className="mb-2 flex flex-wrap items-center gap-2">
