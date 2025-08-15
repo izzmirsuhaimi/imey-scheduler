@@ -7,6 +7,7 @@ import SettingsModal from "./SettingsModal";
 import BackgroundCropperModal from "./BackgroundCropperModal";
 import { toPng } from "html-to-image";
 import { saveAs } from "file-saver";
+import html2canvas from "html2canvas";
 
 // helper to convert hex color to rgba with transparency
 function hexToRgba(hex, alpha = 0.5) {
@@ -16,6 +17,9 @@ function hexToRgba(hex, alpha = 0.5) {
 
 const headerHeight = 40;
 const initialHours = Array.from({ length: 13 }, (_, i) => 7 + i);
+
+const isSafari = () =>
+  /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
 function App() {
   const [device, setDevice] = useState(null);
@@ -174,54 +178,112 @@ function App() {
   }
 
   async function downloadTimetable(e) {
-    if (e && e.preventDefault) e.preventDefault();
+    e?.preventDefault();
     if (!timetableRef.current || !device) return;
-    const scale = device.width / gridWidth;
+
     try {
-      const dataUrl = await toPng(timetableRef.current, {
-        cacheBust: true,
-        pixelRatio: scale
-      });
-      saveAs(dataUrl, "timetable.png");
+      const scale = device.width / gridWidth;
+
+      if (isSafari()) {
+        // — Safari fallback with html2canvas at high res —
+        const canvas = await html2canvas(timetableRef.current, {
+          useCORS: true,
+          backgroundColor: "#fff",  // fill behind transparent areas
+          scale,                    // CSS-pixels × scale → real pixels
+        });
+        const dataUrl = canvas.toDataURL("image/png");
+        saveAs(dataUrl, "timetable.png");
+
+      } else {
+        // — default path with html-to-image —
+        const dataUrl = await toPng(timetableRef.current, {
+          cacheBust: true,
+          pixelRatio: scale,        // same scale factor
+        });
+        saveAs(dataUrl, "timetable.png");
+      }
+
     } catch (err) {
       console.error("Export failed:", err);
       alert("Export failed: " + (err.message || err));
     }
   }
 
-  return (
-    <div className="min-h-screen flex flex-col items-center bg-gray-100">
-      <h1 className="text-2xl font-bold mt-6 mb-4">imey-scheduler</h1>
-      <DevicePicker onSelect={setDevice} />
-      {device && (
-        <div className="mt-8 flex flex-col items-center">
-          {/* Top Controls */}
-          <div className="flex gap-2 mb-4">
-            <button
-              className="mb-2 px-4 py-2 bg-yellow-500 text-white rounded"
-              onClick={() => setShowSettings(true)}
-            >
-              Settings
-            </button>
-            <button
-              className="mb-2 px-4 py-2 bg-blue-500 text-white rounded"
-              onClick={() => inputRef.current.click()}
-            >
-              Set Background Image
-            </button>
-            <button
-              className="mb-2 px-4 py-2 bg-green-600 text-white rounded"
-              onClick={() => setShowModal(true)}
-            >
-              + Add Class
-            </button>
-            <button
-              className="mt-2 px-4 py-2 bg-purple-600 text-white rounded"
-              onClick={downloadTimetable}
-            >
-              Download as Image
-            </button>
+  // === Landing screen (rendered when no device is selected) ===
+  if (!device) {
+    return (
+      <div className="landing">
+        <div className="landing__inner">
+          <h1 className="brand">imey‑scheduler</h1>
+          <p className="tagline">
+            Create a clean, aesthetic timetable wallpaper for your lockscreen — right in your browser.
+          </p>
+
+          <div className="card">
+            <label className="card__label" htmlFor="device-picker">
+              Choose your iPhone model:
+            </label>
+            <div className="card__row" id="device-picker">
+              {/* DevicePicker already handles its own dropdown; we just pass onSelect */}
+              <DevicePicker value={device?.name || ""} onSelect={setDevice} />
+            </div>
+            <div className="hint">
+              You can still change the model later.
+            </div>
           </div>
+
+          <p className="note">made by izzmirsuhaimi.</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen flex flex-col items-center">
+      {/* ===== Top Toolbar (keeps DevicePicker visible here) ===== */}
+      <header className="ui-toolbar w-full sticky top-0 z-20">
+        <div className="max-w-6xl mx-auto px-6 py-3 flex items-center gap-4">
+          {/* Editor header */}
+          <div className="editor-bar">
+            <h1 className="brand brand--editor">imey‑scheduler</h1>
+            <p className="tagline">Create a clean, aesthetic timetable wallpaper for your lockscreen.</p>
+          </div>
+          {/* Put your existing DevicePicker line here, unchanged */}
+          <div className="editor-row mt-2 mb-2">
+            <DevicePicker value={device?.name || ""} onSelect={setDevice} />
+          </div>
+        </div>
+      </header>
+
+      {device && (
+        <div className="w-full max-w-6xl px-6 mt-4">
+          {/* Top Controls */}
+          {/* Action buttons strip (flat, no rounded corners) */}
+          <div className="btn-strip">
+            <div className="editor-row">
+              <div className="btn-row">
+                <button className="btn" onClick={() => setShowSettings(true)}>
+                  Settings
+                </button>
+
+                <button
+                  className="btn"
+                  onClick={() => inputRef.current && inputRef.current.click()}
+                >
+                  Set Background Image
+                </button>
+
+                <button className="btn" onClick={() => setShowModal(true)}>
+                  + Add Class
+                </button>
+
+                <button className="btn btn--primary" onClick={downloadTimetable}>
+                  Download as Image
+                </button>
+              </div>
+            </div>
+          </div>
+
           <input
             type="file"
             accept="image/*"
@@ -230,254 +292,268 @@ function App() {
             ref={inputRef}
           />
 
-          <DaysPicker
-            selectedDays={selectedDays}
-            setSelectedDays={days => setSelectedDays(sortDays(days))}
-          />
+          <div className="mt-6 w-full max-w-6xl px-6">
+            {/* Days + Time rows strip (flat, no rounded corners) */}
+            <div className="btn-strip">
+              <div className="editor-row">
+                {/* Days row */}
+                <div className="daysbar">
+                  <DaysPicker
+                    selectedDays={selectedDays}
+                    setSelectedDays={(days) => setSelectedDays(sortDays(days))}
+                  />
+                </div>
 
-          <button
-            className="mb-2 px-4 py-2 bg-green-600 text-white rounded"
-            onClick={() => setShowModal(true)}
-          >
-            + Add Class
-          </button>
+                {/* Hour controls */}
+                <div className="timerow">
+                  <span className="mr-2 text-sm font-medium">Manage time rows:</span>
 
-          {/* Hour controls */}
-          <div className="mb-2 flex flex-wrap items-center gap-2">
-            <span className="mr-2 text-sm font-medium">Manage time rows:</span>
-            {sortedHours.map(hour => (
-              <button
-                key={hour}
-                onClick={() => canDeleteHour(hour) && removeHour(hour)}
-                className={`text-xs px-2 py-1 rounded border ${canDeleteHour(hour) ? "bg-red-100 hover:bg-red-200 text-red-600" : "bg-gray-100 text-gray-400 cursor-not-allowed"}`}
-                disabled={!canDeleteHour(hour)}
-                title={canDeleteHour(hour) ? "Delete this hour row" : "Cannot delete (row contains class)"}
-                style={{ minWidth: 40 }}
-              >
-                {hour < 10 ? `0${hour}` : hour}:00 ✕
-              </button>
-            ))}
-            {missingHours.length > 0 && (
-              <select
-                className="ml-4 text-xs border p-1 rounded"
-                onChange={e => {
-                  const val = Number(e.target.value);
-                  if (val) addHour(val);
-                  e.target.value = "";
-                }}
-                defaultValue=""
-              >
-                <option value="" disabled>
-                  + Add row...
-                </option>
-                {missingHours.map(h => (
-                  <option key={h} value={h}>
-                    {h < 10 ? `0${h}` : h}:00
-                  </option>
-                ))}
-              </select>
-            )}
+                  {sortedHours.map((hour) => (
+                    <button
+                      key={hour}
+                      onClick={() => canDeleteHour(hour) && removeHour(hour)}
+                      className={`hour-chip ${canDeleteHour(hour) ? "is-danger" : "is-disabled"}`}
+                      disabled={!canDeleteHour(hour)}
+                      title={
+                        canDeleteHour(hour)
+                          ? "Delete this hour row"
+                          : "Cannot delete (row contains class)"
+                      }
+                    >
+                      {hour < 10 ? `0${hour}` : hour}:00 ×
+                    </button>
+                  ))}
+
+                  {missingHours.length > 0 && (
+                    <select
+                      className="select-compact ml-2"
+                      onChange={(e) => {
+                        const val = Number(e.target.value);
+                        if (val) addHour(val);
+                        e.target.value = "";
+                      }}
+                      defaultValue=""
+                    >
+                      <option value="" disabled>
+                        + Add row...
+                      </option>
+                      {missingHours.map((h) => (
+                        <option key={h} value={h}>
+                          {h < 10 ? `0${h}` : h}:00
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* Timetable Grid */}
-          <div
-            ref={timetableRef}
-            style={{
-              width: `${gridWidth}px`,
-              height: `${gridHeight}px`,
-              background: "#fff",
-              position: "relative",
-              boxShadow: "0 2px 12px rgba(0,0,0,0.07)",
-              overflow: "hidden",
-            }}
-          >
-            {backgroundImage && (
-              <img
-                src={backgroundImage}
-                alt=""
+          {/* Timetable */}
+          <div className="timetable-row">
+            <div className="timetable-center">
+              {/* Timetable Grid */}
+              <div
+                ref={timetableRef}
                 style={{
-                  position: "absolute",
-                  left: 0,
-                  top: 0,
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  zIndex: 0,
-                  pointerEvents: "none",
-                  userSelect: "none",
+                  width: `${gridWidth}px`,
+                  height: `${gridHeight}px`,
+                  background: "#fff",
+                  position: "relative",
+                  boxShadow: "0 10px 28px rgba(0,0,0,0.12)",  // slightly softer/larger
+                  overflow: "hidden",
                 }}
-              />
-            )}
-            {/* Time axis overlay */}
-            <div
-              style={{
-                position: "absolute",
-                left: 0,
-                top: headerHeight + safeAreaOffset,
-                width: 40,
-                height: gridHeight - headerHeight,
-                zIndex: 3,
-                pointerEvents: "none",
-                background: "transparent",
-                opacity: activeSettings.dayTimeOpacity
-              }}
-            >
-              {sortedHours.map(hour => (
+              >
+                {backgroundImage && (
+                  <img
+                    src={backgroundImage}
+                    alt=""
+                    style={{
+                      position: "absolute",
+                      left: 0,
+                      top: 0,
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      zIndex: 0,
+                      pointerEvents: "none",
+                      userSelect: "none",
+                    }}
+                  />
+                )}
+                {/* Time axis overlay */}
                 <div
-                  key={hour}
                   style={{
                     position: "absolute",
-                    top: timeToY(hour * 60) - headerHeight,
                     left: 0,
-                    width: "100%",
-                    textAlign: "center",
-                    transform: "translateY(-50%)",
-                    fontSize: activeSettings.dayTimeTextSize,
-                    color: activeSettings.dayTimeTextColor,
-                    textShadow: "0 0 4px #000,0 0 2px #000"
+                    top: headerHeight + safeAreaOffset,
+                    width: 40,
+                    height: gridHeight - headerHeight,
+                    zIndex: 3,
+                    pointerEvents: "none",
+                    background: "transparent",
+                    opacity: activeSettings.dayTimeOpacity
                   }}
                 >
-                  {hour < 10 ? `0${hour}` : hour}
+                  {sortedHours.map(hour => (
+                    <div
+                      key={hour}
+                      style={{
+                        position: "absolute",
+                        top: timeToY(hour * 60) - headerHeight,
+                        left: 0,
+                        width: "100%",
+                        textAlign: "center",
+                        transform: "translateY(-50%)",
+                        fontSize: activeSettings.dayTimeTextSize,
+                        color: activeSettings.dayTimeTextColor,
+                        textShadow: "0 0 4px #000,0 0 2px #000"
+                      }}
+                    >
+                      {hour < 10 ? `0${hour}` : hour}
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-            {/* Day labels overlay */}
-            <div
-              style={{
-                position: "absolute",
-                left: 40,
-                top: safeAreaOffset,
-                height: headerHeight,
-                width: `calc(100% - 40px)`,
-                display: "flex",
-                zIndex: 3,
-                background: "transparent",
-                opacity: activeSettings.dayTimeOpacity
-              }}
-            >
-              {selectedDays.map(day => (
+                {/* Day labels overlay */}
                 <div
-                  key={day}
                   style={{
-                    flex: 1,
-                    fontWeight: "normal",
-                    fontSize: activeSettings.dayTimeTextSize,
-                    color: activeSettings.dayTimeTextColor,
-                    textShadow: "0 0 4px #000,0 0 2px #000",
-                    textAlign: "center",
-                    lineHeight: `${headerHeight}px`
+                    position: "absolute",
+                    left: 40,
+                    top: safeAreaOffset,
+                    height: headerHeight,
+                    width: `calc(100% - 40px)`,
+                    display: "flex",
+                    zIndex: 3,
+                    background: "transparent",
+                    opacity: activeSettings.dayTimeOpacity
                   }}
                 >
-                  {dayLabels[parseInt(day.slice(-1))].label}
+                  {selectedDays.map(day => (
+                    <div
+                      key={day}
+                      style={{
+                        flex: 1,
+                        fontWeight: "normal",
+                        fontSize: activeSettings.dayTimeTextSize,
+                        color: activeSettings.dayTimeTextColor,
+                        textShadow: "0 0 4px #000,0 0 2px #000",
+                        textAlign: "center",
+                        lineHeight: `${headerHeight}px`
+                      }}
+                    >
+                      {dayLabels[parseInt(day.slice(-1))].label}
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-            {/* Class cells overlay */}
-            <div
-              style={{
-                position: "absolute",
-                left: 40,
-                top: headerHeight + safeAreaOffset,
-                width: `calc(100% - 40px)`,
-                height: gridHeight - headerHeight,
-                zIndex: 4
-              }}
-            >
-              {selectedDays.map((day, dayIdx) => {
-                const numDays = selectedDays.length;
-                const colWidth = (gridWidth - 40) / numDays;
-                const isLastCol = dayIdx === numDays - 1;
-                return (
-                  <React.Fragment key={day}>
-                    {cellsForDay(day).map((c, idx) => {
-                      const startY = timeToY(toMins(c.startTime)) - headerHeight;
-                      const endY = timeToY(toMins(c.endTime)) - headerHeight;
-                      let adjustTop = 0;
-                      const sorted = cellsForDay(day);
-                      if (idx > 0) {
-                        const prev = sorted[idx - 1];
-                        if (prev && toMins(prev.endTime) === toMins(c.startTime)) {
-                          adjustTop = 1;
-                        }
-                      }
-                      const realStartY = startY + adjustTop;
-                      const realHeight = Math.max(12, endY - realStartY);
-                      return (
-                        <div
-                          key={idx}
-                          onClick={() => { setEditClass(c); setShowEdit(true); }}
-                          style={{
-                            position: "absolute",
-                            left: Math.round(colWidth * dayIdx),
-                            width: isLastCol
-                              ? Math.ceil(colWidth)
-                              : Math.floor(colWidth),
-                            top: realStartY,
-                            height: realHeight,
-                            background: hexToRgba(c.cellColor, activeSettings.cellOpacity),
-                            boxSizing: "border-box",
-                            borderRadius: 0,
-                            color: activeSettings.cellTextColor,
-                            fontSize: activeSettings.cellTextSize,
-                            boxShadow: "none",
-                            padding: "0",
-                            display: "flex",
-                            flexDirection: "column",
-                            justifyContent: "space-between",
-                            cursor: "pointer",
-                            zIndex: 10,
-                            overflow: "hidden",
-                            borderRight: !isLastCol ? "1px solid transparent" : undefined
-                          }}
-                        >
-                          <div style={{ fontSize: activeSettings.cellTimeTextSize, fontWeight: 500, textShadow: activeSettings.cellTextShadow ? "0 0 2px #000" : "none" }}>
-                            {c.startTime}
-                          </div>
-                          <div
-                            style={{
-                              flex: 1,
-                              textAlign: "center",
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                              whiteSpace: "pre-line",
-                              wordBreak: "break-word",
-                              padding: 2,
-                              display: "flex",
-                              flexDirection: "column",
-                              justifyContent: "center"
-                            }}
-                          >
-                            <div style={{
-                              fontWeight: 700,
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                              whiteSpace: "pre-line",
-                              wordBreak: "break-word",
-                              fontSize: activeSettings.cellTextSize,
-                              textShadow: activeSettings.cellTextShadow ? "0 0 2px #000" : "none"
-                            }}>{c.className}</div>
-                            {c.location && (
-                              <div style={{
+                {/* Class cells overlay */}
+                <div
+                  style={{
+                    position: "absolute",
+                    left: 40,
+                    top: headerHeight + safeAreaOffset,
+                    width: `calc(100% - 40px)`,
+                    height: gridHeight - headerHeight,
+                    zIndex: 4
+                  }}
+                >
+                  {selectedDays.map((day, dayIdx) => {
+                    const numDays = selectedDays.length;
+                    const colWidth = (gridWidth - 40) / numDays;
+                    const isLastCol = dayIdx === numDays - 1;
+                    return (
+                      <React.Fragment key={day}>
+                        {cellsForDay(day).map((c, idx) => {
+                          const startY = timeToY(toMins(c.startTime)) - headerHeight;
+                          const endY = timeToY(toMins(c.endTime)) - headerHeight;
+                          let adjustTop = 0;
+                          const sorted = cellsForDay(day);
+                          if (idx > 0) {
+                            const prev = sorted[idx - 1];
+                            if (prev && toMins(prev.endTime) === toMins(c.startTime)) {
+                              adjustTop = 1;
+                            }
+                          }
+                          const realStartY = startY + adjustTop;
+                          const realHeight = Math.max(12, endY - realStartY);
+                          return (
+                            <div
+                              key={idx}
+                              onClick={() => { setEditClass(c); setShowEdit(true); }}
+                              style={{
+                                position: "absolute",
+                                left: Math.round(colWidth * dayIdx),
+                                width: isLastCol
+                                  ? Math.ceil(colWidth)
+                                  : Math.floor(colWidth),
+                                top: realStartY,
+                                height: realHeight,
+                                background: hexToRgba(c.cellColor, activeSettings.cellOpacity),
+                                boxSizing: "border-box",
+                                borderRadius: 0,
+                                color: activeSettings.cellTextColor,
                                 fontSize: activeSettings.cellTextSize,
+                                boxShadow: "none",
+                                padding: "0",
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "space-between",
+                                cursor: "pointer",
+                                zIndex: 10,
                                 overflow: "hidden",
-                                textOverflow: "ellipsis",
-                                whiteSpace: "pre-line",
-                                wordBreak: "break-word",
-                                textShadow: activeSettings.cellTextShadow ? "0 0 2px #000" : "none"
-                              }}>{c.location}</div>
-                            )}
-                          </div>
-                          <div style={{ fontSize: activeSettings.cellTimeTextSize, textAlign: "right", textShadow: activeSettings.cellTextShadow ? "0 0 2px #000" : "none" }}>
-                            {c.endTime}
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </React.Fragment>
-                );
-              })}
+                                borderRight: !isLastCol ? "1px solid transparent" : undefined
+                              }}
+                            >
+                              <div style={{ fontSize: activeSettings.cellTimeTextSize, fontWeight: 500, textShadow: activeSettings.cellTextShadow ? "0 0 2px #000" : "none" }}>
+                                {c.startTime}
+                              </div>
+                              <div
+                                style={{
+                                  flex: 1,
+                                  textAlign: "center",
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                  whiteSpace: "pre-line",
+                                  wordBreak: "break-word",
+                                  padding: 2,
+                                  display: "flex",
+                                  flexDirection: "column",
+                                  justifyContent: "center"
+                                }}
+                              >
+                                <div style={{
+                                  fontWeight: 700,
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                  whiteSpace: "pre-line",
+                                  wordBreak: "break-word",
+                                  fontSize: activeSettings.cellTextSize,
+                                  textShadow: activeSettings.cellTextShadow ? "0 0 2px #000" : "none"
+                                }}>{c.className}</div>
+                                {c.location && (
+                                  <div style={{
+                                    fontSize: activeSettings.cellTextSize,
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    whiteSpace: "pre-line",
+                                    wordBreak: "break-word",
+                                    textShadow: activeSettings.cellTextShadow ? "0 0 2px #000" : "none"
+                                  }}>{c.location}</div>
+                                )}
+                              </div>
+                              <div style={{ fontSize: activeSettings.cellTimeTextSize, textAlign: "right", textShadow: activeSettings.cellTextShadow ? "0 0 2px #000" : "none" }}>
+                                {c.endTime}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </React.Fragment>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
           </div>
+
           <div className="mt-2 text-xs text-gray-400">
             (Preview is scaled down for your screen. Final export will be full resolution.)
           </div>
