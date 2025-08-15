@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const iphoneModels = [
   { name: "iPhone 16 Pro Max", width: 1320, height: 2868 },
@@ -12,36 +12,44 @@ const iphoneModels = [
   { name: "iPhone 12/13 Mini", width: 1080, height: 2340 }
 ];
 
-export default function DevicePicker({ onSelect }) {
-  const [selected, setSelected] = useState("");
+export default function DevicePicker({ onSelect, value = "", showSizeHint = true }) {
+  const [selected, setSelected] = useState(value);
 
-  function handleSelect(model) {
-    setSelected(model.name);
-    onSelect(model);
-  }
+  // keep the internal state in sync with the parent prop
+  useEffect(() => {
+    setSelected(value ?? "");
+  }, [value]);
+
+  const handleChange = (e) => {
+    const v = e.target.value;
+    setSelected(v);
+    const model = iphoneModels.find((m) => m.name === v);
+    if (model && typeof onSelect === "function") onSelect(model);
+  };
+
+  const selectedModel = iphoneModels.find((m) => m.name === selected) || null;
 
   return (
-    <div className="p-6">
-      <label className="block text-lg font-bold mb-2">Choose your iPhone model:</label>
+    <div>
       <select
-        className="p-2 rounded border"
+        className="select-modern"
         value={selected}
-        onChange={e =>
-          handleSelect(iphoneModels.find(m => m.name === e.target.value))
-        }
+        onChange={handleChange}
+        aria-label="Select iPhone model"
       >
         <option value="" disabled>
           Select model
         </option>
-        {iphoneModels.map(model => (
+        {iphoneModels.map((model) => (
           <option key={model.name} value={model.name}>
             {model.name} ({model.width}×{model.height})
           </option>
         ))}
       </select>
-      {selected && (
-        <div className="mt-4 text-sm text-gray-500">
-          Wallpaper size: <b>{iphoneModels.find(m => m.name === selected).width} × {iphoneModels.find(m => m.name === selected).height}</b> px
+
+      {showSizeHint && selectedModel && (
+        <div className="mt-2 text-sm ui-hint">
+          Wallpaper size: <b>{selectedModel.width} × {selectedModel.height}</b> px
         </div>
       )}
     </div>
