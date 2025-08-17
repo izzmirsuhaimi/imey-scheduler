@@ -32,6 +32,7 @@ function App() {
   const [showCropper, setShowCropper] = useState(false);
   const [rawImage, setRawImage] = useState(null);
   const [backgroundImage, setBackgroundImage] = useState(null);
+
   // ── SETTINGS STATE ──────────────────────────
   const [showSettings, setShowSettings] = useState(false);
   const [settings, setSettings] = useState({
@@ -43,6 +44,7 @@ function App() {
     dayTimeTextSize: 13,
     dayTimeTextColor: "#ffffff",
     dayTimeOpacity: 1,
+    dayTimeTextShadow: true,
   });
   const [previewSettings, setPreviewSettings] = useState(settings);
   useEffect(() => {
@@ -407,7 +409,9 @@ function App() {
                         transform: "translateY(-50%)",
                         fontSize: activeSettings.dayTimeTextSize,
                         color: activeSettings.dayTimeTextColor,
-                        textShadow: "0 0 4px #000,0 0 2px #000"
+                        textShadow: activeSettings.dayTimeTextShadow
+                          ? "0 0 4px #000,0 0 2px #000"
+                          : "none",
                       }}
                     >
                       {hour < 10 ? `0${hour}` : hour}
@@ -436,7 +440,9 @@ function App() {
                         fontWeight: "normal",
                         fontSize: activeSettings.dayTimeTextSize,
                         color: activeSettings.dayTimeTextColor,
-                        textShadow: "0 0 4px #000,0 0 2px #000",
+                        textShadow: activeSettings.dayTimeTextShadow
+                          ? "0 0 4px #000,0 0 2px #000"
+                          : "none",
                         textAlign: "center",
                         lineHeight: `${headerHeight}px`
                       }}

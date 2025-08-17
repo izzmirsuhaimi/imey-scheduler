@@ -322,3 +322,416 @@ body {
   display: flex;
   justify-content: center; /* centers the grid horizontally */
 }
+
+
+/* ---------- Settings Modal – Modern UI ---------- */
+:root {
+  --card-bg: rgba(255,255,255,0.9);
+  --card-border: rgba(0,0,0,0.08);
+  --text: #1f2937;          /* gray-800 */
+  --muted: #6b7280;         /* gray-500 */
+  --ring: #3b82f6;          /* blue-500 */
+  --primary: #10b981;       /* emerald-500 */
+  --primary-600: #059669;
+  --danger: #ef4444;
+  --surface: #f3f4f6;       /* gray-100 */
+}
+.settings-card {
+  width: min(640px, 92vw);
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+  padding: 18px 18px 14px;
+  color: var(--text);
+}
+.settings-title {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: .2px;
+  margin: 4px 0 12px;
+}
+.settings-section {
+  padding: 12px 12px 2px;
+  background: #fff;
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+.settings-section h4 {
+  margin: 0 0 10px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .3px;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 140px;
+  gap: 10px 14px;
+  align-items: center;
+}
+.form-row {
+  display: contents; /* lets label/input align to grid cells */
+}
+.form-row > label {
+  font-size: 14px;
+}
+.help {
+  grid-column: 1 / -1;
+  margin: -4px 0 2px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.input, .select, .number, .color, .range {
+  width: 100%;
+}
+.input, .select, .number {
+  font-size: 14px;
+  padding: 10px 12px;
+  border: 1px solid var(--card-border);
+  background: #fff;
+  border-radius: 10px;
+  outline: none;
+  transition: box-shadow .15s ease, border-color .15s ease, background .15s ease;
+}
+.input:focus, .select:focus, .number:focus {
+  border-color: var(--ring);
+  box-shadow: 0 0 0 4px rgba(59,130,246,.15);
+}
+/* Range slider */
+.range[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--primary) 0%, var(--primary) var(--_val,50%), #e5e7eb var(--_val,50%), #e5e7eb 100%);
+  outline: none;
+}
+.range[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px; height: 18px;
+  background: #fff;
+  border: 2px solid var(--primary);
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0,0,0,.2);
+  transition: transform .1s ease;
+}
+.range[type="range"]::-webkit-slider-thumb:active { transform: scale(1.05); }
+.range[type="range"]::-moz-range-thumb {
+  width: 18px; height: 18px;
+  background: #fff;
+  border: 2px solid var(--primary);
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0,0,0,.2);
+}
+/* Checkbox */
+.checkbox {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 14px;
+}
+.checkbox input[type="checkbox"] {
+  width: 16px; height: 16px; accent-color: var(--primary);
+}
+/* Color picker */
+.color[type="color"] {
+  -webkit-appearance: none;
+  appearance: none;
+  padding: 0;
+  width: 44px; height: 28px;
+  border-radius: 8px;
+  border: 1px solid var(--card-border);
+  background: #fff;
+  cursor: pointer;
+}
+.color[type="color"]::-webkit-color-swatch-wrapper { padding: 2px; }
+.color[type="color"]::-webkit-color-swatch {
+  border: none; border-radius: 6px;
+}
+.color[type="color"]::-moz-color-swatch {
+  border: none; border-radius: 6px;
+}
+/* Footer buttons */
+.settings-footer {
+  display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px;
+}
+.btn {
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 14px; font-weight: 600;
+  cursor: pointer;
+  transition: box-shadow .15s ease, transform .03s ease, background .15s ease, border-color .15s ease;
+}
+.btn:active { transform: translateY(1px); }
+.btn-ghost {
+  background: #fff; color: var(--text); border-color: var(--card-border);
+}
+.btn-ghost:hover { background: var(--surface); }
+.btn-primary {
+  background: var(--primary); color: #fff;
+}
+.btn-primary:hover { background: var(--primary-600); }
+/* Settings overlay (sits above everything) */
+.settings-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 99999;            /* higher than anything in the app */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: auto;
+}
+
+
+/* --- Fix number input layout & inputs --- */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 160px; /* left = label, right = input+unit */
+  gap: 10px 14px;
+  align-items: center;
+}
+/* prevent long labels from wrapping into the input column */
+.form-row > label {
+  white-space: nowrap;
+}
+/* wrap the number input + its "px" unit on the same row */
+.number-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;                 /* space between input and "px" */
+  width: 100%;
+}
+/* size + polish number inputs (no overflow) */
+.number {
+  flex: 1;
+  width: 100%;
+  font-size: 14px;
+  padding: 8px 10px;
+  border: 1px solid var(--card-border);
+  background: #fff;
+  border-radius: 8px;
+  outline: none;
+  box-sizing: border-box;
+  transition: box-shadow .15s ease, border-color .15s ease, background .15s ease;
+}
+.number:focus {
+  border-color: var(--ring);
+  box-shadow: 0 0 0 4px rgba(59,130,246,.15);
+}
+/* the small "px" badge */
+.unit {
+  font-size: 12px;
+  color: var(--muted);
+}
+/* responsive: on narrow screens just stack label above input */
+@media (max-width: 520px) {
+  .form-grid { grid-template-columns: 1fr; }
+}
+.number {
+  padding-right: 26px;   /* room for native steppers */
+}
+
+
+/* custom stepper wrapper */
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.stepper button {
+  border: 1px solid var(--card-border);
+  background: #fff;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition: background .15s ease, box-shadow .15s ease;
+}
+.stepper button:hover {
+  background: var(--surface);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+.stepper input.number {
+  text-align: center;
+  padding: 6px 8px;
+  -moz-appearance: textfield;
+}
+.stepper input.number::-webkit-outer-spin-button,
+.stepper input.number::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+
+/* ---------- Cropper Modal ---------- */
+.cropper-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+}
+.cropper-card {
+  width: min(92vw, 860px);
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #fff;
+  border: 1px solid var(--edge);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+  padding: 16px;
+}
+.cropper-title {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: .2px;
+  margin-bottom: 2px;
+}
+.cropper-area {
+  position: relative;
+  width: 100%;
+  max-height: 70vh;      /* keeps it visible on laptops */
+  overflow: hidden;
+}
+.cropper-zoom {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.cropper-zoom input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  flex: 1;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--primary) 0%, var(--primary) var(--_val,50%), #e5e7eb var(--_val,50%));
+  outline: none;
+}
+.cropper-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+
+/* Add Class modal: day pill layout */
+.day-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+/* --- Add Class modal sizing --- */
+.addclass-card {
+  width: min(92vw, 640px);
+  overflow: hidden;
+}
+/* --- Add Class form layout (scoped) --- */
+.addclass-card .ac-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+/* Each row = label (140px) + field (flex) */
+.addclass-card .ac-row {
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1fr);
+  align-items: center;
+  column-gap: 16px;
+}
+/* Label style (scoped) */
+.addclass-card .ac-row > label {
+  font-size: 14px;
+  color: #111827;
+  white-space: nowrap;
+}
+/* Optional: keep these if you like the compact color chip */
+.addclass-card .color {
+  width: 44px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+/* Day checkboxes layout */
+.addclass-card .day-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  min-width: 0;
+}
+/* Inputs: never overflow the grid cell */
+.input {
+  width: 100%;
+  box-sizing: border-box;
+}
+/* Color input: compact chip-like */
+.color {
+  width: 44px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+/* Day checkboxes in a neat wrap */
+.day-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  min-width: 0; /* allows wrapping without pushing layout */
+}
+.checkbox input {
+  margin-right: 6px;
+}
+/* Safety: prevent any child from forcing overflow */
+.addclass-card * { min-width: 0; }
+
+
+/* --- Edit Class modal sizing --- */
+.editclass-card {
+  width: min(92vw, 640px);
+  overflow: hidden;
+}
+/* --- Edit Class form layout (scoped, same grid as Add Class) --- */
+.editclass-card .ec-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.editclass-card .ec-row {
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1fr);
+  align-items: center;
+  column-gap: 16px;
+}
+.editclass-card .ec-row > label {
+  font-size: 14px;
+  color: #111827;
+  white-space: nowrap;
+}
+/* Footer split: left (danger) + right (cancel/save) */
+.settings-footer.settings-footer-split {
+  justify-content: space-between;
+  align-items: center;
+}
+.settings-footer-split .actions-right {
+  display: flex;
+  gap: 8px;
+}
+/* Danger button variant (subtle) */
+.btn-danger-ghost {
+  background: #fff;
+  color: var(--danger);
+  border: 1px solid #fecaca;
+}
+.btn-danger-ghost:hover {
+  background: #fef2f2;
+  border-color: #fca5a5;
+}

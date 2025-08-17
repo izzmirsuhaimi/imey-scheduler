@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 export default function AddClassModal({ visible, onClose, onAdd, days }) {
-  // Form states
+  // Form state
   const [className, setClassName] = useState("");
   const [location, setLocation] = useState("");
   const [selectedDays, setSelectedDays] = useState([]);
@@ -9,38 +9,40 @@ export default function AddClassModal({ visible, onClose, onAdd, days }) {
   const [endTime, setEndTime] = useState("10:00");
   const [cellColor, setCellColor] = useState("#c2d3f3");
 
-  // Generate time options (7:00 to 22:00)
-  const timeOptions = [];
-  for (let h = 7; h <= 22; h++) {
-    for (let m = 0; m < 60; m += 30) {
-      let hh = h < 10 ? `0${h}` : h;
-      let mm = m === 0 ? "00" : m;
-      timeOptions.push(`${hh}:${mm}`);
-    }
-  }
+  const nameRef = useRef(null);
 
-  // When opening, reset all fields
-  React.useEffect(() => {
-    if (visible) {
-      setClassName("");
-      setLocation("");
-      setSelectedDays([]);
-      setStartTime("09:00");
-      setEndTime("10:00");
-      setCellColor("#c2d3f3");
-    }
+  // Reset fields & focus when the modal opens
+  useEffect(() => {
+    if (!visible) return;
+    setClassName("");
+    setLocation("");
+    setSelectedDays([]);
+    setStartTime("09:00");
+    setEndTime("10:00");
+    setCellColor("#c2d3f3");
+    // focus first field
+    setTimeout(() => nameRef.current?.focus(), 0);
+    // lock scroll
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = prev; };
   }, [visible]);
 
+  function toggleDay(code) {
+    setSelectedDays((prev) =>
+      prev.includes(code) ? prev.filter((d) => d !== code) : [...prev, code]
+    );
+  }
+
+  function dayLabel(code) {
+    // Friendly labels based on your day codes (e.g., M0, T1, W2, T3, F4, S5, S6)
+    const idx = parseInt(code.slice(-1), 10);
+    return ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"][idx] || code;
+  }
+
   function handleAdd() {
-    if (!className || selectedDays.length === 0) return; // only className required now
-    onAdd({
-      className,
-      location,
-      days: selectedDays,
-      startTime,
-      endTime,
-      cellColor
-    });
+    if (!className || selectedDays.length === 0) return;
+    onAdd({ className, location, days: selectedDays, startTime, endTime, cellColor });
     onClose();
   }
 
@@ -48,94 +50,96 @@ export default function AddClassModal({ visible, onClose, onAdd, days }) {
 
   return (
     <div
-      style={{
-        position: "fixed",
-        top: 0, left: 0, width: "100vw", height: "100vh",
-        background: "rgba(0,0,0,0.22)", zIndex: 20,
-        display: "flex", justifyContent: "center", alignItems: "center"
-      }}
+      className="settings-overlay"
+      role="dialog"
+      aria-modal="true"
+      onClick={onClose}
     >
-      <div
-        style={{
-          background: "#fff",
-          borderRadius: 18,
-          padding: 28,
-          minWidth: 340,
-          boxShadow: "0 4px 32px #0002",
-          maxWidth: "95vw"
-        }}
-      >
-        <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 12 }}>
-          Add Class
-        </h2>
-        <div className="mb-2">
-          <label>Class Name:</label>
-          <input type="text" value={className} onChange={e => setClassName(e.target.value)}
-            className="block w-full border rounded p-1 mb-2" />
-        </div>
-        <div className="mb-2">
-          <label>Location:</label>
-          <input type="text" value={location} onChange={e => setLocation(e.target.value)}
-            className="block w-full border rounded p-1 mb-2" />
-        </div>
-        <div className="mb-2">
-          <label>Days:</label>
-          <div className="flex flex-wrap gap-2 mb-2">
-            {days.map((d, idx) => (
-              <label key={d} className="flex items-center gap-1">
-                <input
-                  type="checkbox"
-                  checked={selectedDays.includes(d)}
-                  onChange={() =>
-                    setSelectedDays(
-                      selectedDays.includes(d)
-                        ? selectedDays.filter(x => x !== d)
-                        : [...selectedDays, d]
-                    )
-                  }
-                />
-                <span>{d}</span>
-              </label>
-            ))}
-          </div>
-        </div>
+      <div className="settings-card addclass-card" onClick={(e) => e.stopPropagation()}>
+        <div className="settings-title">Add Class</div>
 
-        <div className="mb-2 flex gap-2">
-          <div>
-            <label>Start Time:</label>
+        <div className="ac-grid">
+          <div className="ac-row">
+            <label htmlFor="ac-name">Class Name</label>
             <input
-              type="time"
-              value={startTime}
-              onChange={e => setStartTime(e.target.value)}
-              className="block border rounded p-1"
-              step="60" // allows per-minute input
+              id="ac-name"
+              ref={nameRef}
+              className="input"
+              type="text"
+              value={className}
+              onChange={(e) => setClassName(e.target.value)}
+              placeholder="e.g., Calculus"
             />
           </div>
-          <div>
-            <label>End Time:</label>
+
+          <div className="ac-row">
+            <label htmlFor="ac-location">Location</label>
             <input
+              id="ac-location"
+              className="input"
+              type="text"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              placeholder="e.g., Room 202"
+            />
+          </div>
+
+          <div className="ac-row">
+            <label>Days</label>
+            <div className="day-pills">
+              {days.map((d) => (
+                <label key={d} className="checkbox">
+                  <input
+                    type="checkbox"
+                    checked={selectedDays.includes(d)}
+                    onChange={() => toggleDay(d)}
+                  />
+                  <span>{dayLabel(d)}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div className="ac-row">
+            <label htmlFor="ac-start">Start Time</label>
+            <input
+              id="ac-start"
+              className="input"
               type="time"
-              value={endTime}
-              onChange={e => setEndTime(e.target.value)}
-              className="block border rounded p-1"
               step="60"
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
+            />
+          </div>
+
+          <div className="ac-row">
+            <label htmlFor="ac-end">End Time</label>
+            <input
+              id="ac-end"
+              className="input"
+              type="time"
+              step="60"
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
+            />
+          </div>
+
+          <div className="ac-row">
+            <label htmlFor="ac-color">Cell Color</label>
+            <input
+              id="ac-color"
+              className="color"
+              type="color"
+              value={cellColor}
+              onChange={(e) => setCellColor(e.target.value)}
             />
           </div>
         </div>
 
-        <div className="mb-2 flex gap-2">
-          <div>
-            <label>Cell Color:</label>
-            <input type="color" value={cellColor} onChange={e => setCellColor(e.target.value)} />
-          </div>
-        </div>
-        <div className="flex gap-4 mt-4">
-          <button className="px-3 py-1 rounded bg-blue-500 text-white" onClick={handleAdd}>
-            Add
-          </button>
-          <button className="px-3 py-1 rounded bg-gray-300" onClick={onClose}>
-            Cancel
-          </button>
+        {/* Footer: Cancel left, Add right */}
+        <div className="settings-footer">
+          <button className="btn btn-ghost" onClick={onClose}>Cancel</button>
+          <button className="btn btn-primary" onClick={handleAdd}>Add</button>
         </div>
       </div>
     </div>
