@@ -27,8 +27,6 @@ export default function DevicePicker({ onSelect, value = "", showSizeHint = true
     if (model && typeof onSelect === "function") onSelect(model);
   };
 
-  const selectedModel = iphoneModels.find((m) => m.name === selected) || null;
-
   return (
     <div>
       <select
@@ -47,11 +45,6 @@ export default function DevicePicker({ onSelect, value = "", showSizeHint = true
         ))}
       </select>
 
-      {showSizeHint && selectedModel && (
-        <div className="mt-2 text-sm ui-hint">
-          Wallpaper size: <b>{selectedModel.width} × {selectedModel.height}</b> px
-        </div>
-      )}
     </div>
   );
 }

@@ -12,6 +12,7 @@ code {
 }
 
 
+
 /* --- Landing page styles --- */
 :root {
   --brand: #111;
@@ -76,6 +77,7 @@ body {
 }
 
 
+
 /* --- Theme polish (non-invasive) --- */
 :root {
   --edge: #e5e7eb;            /* border gray-200 */
@@ -93,7 +95,6 @@ body {
   backdrop-filter: blur(6px);
   border-bottom: 1px solid var(--edge);
 }
-
 /* Card container */
 .ui-card {
   background: var(--panel-bg);
@@ -118,6 +119,7 @@ body {
   color: var(--muted);
   font-size: 12px;
 }
+
 
 
 /* Editor header */
@@ -157,6 +159,7 @@ body {
   border: 1px solid #e5e7eb;             /* gray-200 */
   border-radius: 10px;
   padding: 8px 36px 8px 10px;            /* right padding for arrow */
+  margin-bottom: 8px;
   font-size: 14px;
   line-height: 1.2;
   box-shadow: 0 6px 18px rgba(15,23,42,0.06);
@@ -178,6 +181,7 @@ body {
   border-color: #a5b4fc;                 /* indigo-300-ish focus */
   box-shadow: 0 0 0 4px rgba(165,180,252,0.35);
 }
+
 
 
 /* Full-width flat strip (no rounded corners) */
@@ -228,6 +232,7 @@ body {
   outline: none;
   box-shadow: 0 0 0 3px rgba(165,180,252,0.45);
 }
+
 
 
 /* === Days + Time rows polish === */
@@ -311,6 +316,7 @@ body {
 }
 
 
+
 /* Timetable area aligned with header, centered */
 .timetable-row {
   width: 100%;
@@ -322,6 +328,7 @@ body {
   display: flex;
   justify-content: center; /* centers the grid horizontally */
 }
+
 
 
 /* ---------- Settings Modal – Modern UI ---------- */
@@ -487,6 +494,7 @@ body {
 }
 
 
+
 /* --- Fix number input layout & inputs --- */
 .form-grid {
   display: grid;
@@ -534,6 +542,7 @@ body {
 .number {
   padding-right: 26px;   /* room for native steppers */
 }
+
 
 
 /* custom stepper wrapper */
@@ -626,6 +635,7 @@ body {
 }
 
 
+
 /* Add Class modal: day pill layout */
 .day-pills { display: flex; flex-wrap: wrap; gap: 8px; }
 /* --- Add Class modal sizing --- */
@@ -692,6 +702,7 @@ body {
 }
 /* Safety: prevent any child from forcing overflow */
 .addclass-card * { min-width: 0; }
+
 
 
 /* --- Edit Class modal sizing --- */

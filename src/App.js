@@ -16,14 +16,16 @@ function hexToRgba(hex, alpha = 0.5) {
 }
 
 const headerHeight = 40;
-const initialHours = Array.from({ length: 13 }, (_, i) => 7 + i);
+// All hours (00–23) for the dropdown, and default visible hours (08–18)
+const ALL_HOURS = Array.from({ length: 24 }, (_, i) => i);
+const DEFAULT_HOURS = Array.from({ length: 11 }, (_, i) => 8 + i);
 
 const isSafari = () =>
   /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
 function App() {
   const [device, setDevice] = useState(null);
-  const [visibleHours, setVisibleHours] = useState(initialHours);
+  const [visibleHours, setVisibleHours] = useState(DEFAULT_HOURS);
   const [selectedDays, setSelectedDays] = useState(["M0", "T1", "W2", "T3", "F4"]);
   const [showModal, setShowModal] = useState(false);
   const [classes, setClasses] = useState([]);
@@ -91,7 +93,7 @@ function App() {
     setVisibleHours(visibleHours.filter(h => h !== hour));
   }
 
-  const missingHours = initialHours.filter(h => !visibleHours.includes(h));
+  const missingHours = ALL_HOURS.filter(h => !visibleHours.includes(h));
   const sortedHours = [...visibleHours].sort((a, b) => a - b);
 
   const gridWidth = Math.round(device ? device.width / 3 : 400);
@@ -330,8 +332,10 @@ function App() {
                     <select
                       className="select-compact ml-2"
                       onChange={(e) => {
-                        const val = Number(e.target.value);
-                        if (val) addHour(val);
+                        const s = e.target.value;
+                        if (s === "") return;                 // ignore the placeholder only
+                        const val = Number(s);
+                        if (!Number.isNaN(val)) addHour(val); // 0 is valid!
                         e.target.value = "";
                       }}
                       defaultValue=""
@@ -558,10 +562,6 @@ function App() {
                 </div>
               </div>
             </div>
-          </div>
-
-          <div className="mt-2 text-xs text-gray-400">
-            (Preview is scaled down for your screen. Final export will be full resolution.)
           </div>
 
           {/* Edit Class Modal */}
