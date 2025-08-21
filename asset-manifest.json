@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/imey-scheduler/static/css/main.41c243e1.css",
+    "main.js": "/imey-scheduler/static/js/main.77b26b23.js",
+    "static/js/453.d0ce4a79.chunk.js": "/imey-scheduler/static/js/453.d0ce4a79.chunk.js",
+    "index.html": "/imey-scheduler/index.html",
+    "main.41c243e1.css.map": "/imey-scheduler/static/css/main.41c243e1.css.map",
+    "main.77b26b23.js.map": "/imey-scheduler/static/js/main.77b26b23.js.map",
+    "453.d0ce4a79.chunk.js.map": "/imey-scheduler/static/js/453.d0ce4a79.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.41c243e1.css",
+    "static/js/main.77b26b23.js"
+  ]
+}
