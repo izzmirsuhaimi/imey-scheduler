@@ -135,6 +135,18 @@ body {
   letter-spacing: -0.02em;
   margin: 0;
 }
+.brand--clickable {
+  cursor: pointer;
+  user-select: none;
+}
+.brand--clickable:hover {
+  opacity: 0.8;
+}
+.brand--clickable:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(165, 180, 252, 0.45);
+  border-radius: 6px;
+}
 
 
 /* Align rows with the header width/padding */
@@ -745,4 +757,81 @@ body {
 .btn-danger-ghost:hover {
   background: #fef2f2;
   border-color: #fca5a5;
+}
+
+
+
+/* ---------- Timetable grid (TimetableGrid component) ---------- */
+.timetable-grid {
+  position: relative;
+  background: #fff;
+  overflow: hidden;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+}
+.timetable-grid__background {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+}
+.timetable-grid__time-axis {
+  position: absolute;
+  left: 0;
+  width: 40px;
+  z-index: 3;
+  pointer-events: none;
+  background: transparent;
+}
+.timetable-grid__day-labels {
+  position: absolute;
+  left: 40px;
+  height: 40px;
+  width: calc(100% - 40px);
+  display: flex;
+  z-index: 3;
+  background: transparent;
+}
+.timetable-grid__cells {
+  position: absolute;
+  left: 40px;
+  width: calc(100% - 40px);
+  height: calc(100% - 40px);
+  z-index: 4;
+}
+
+/* Editor layout helpers */
+.app-editor {
+  padding-bottom: 48px;
+}
+.hidden-input {
+  display: none;
+}
+.btn-strip + .btn-strip {
+  border-top: none;
+}
+/* Solid danger button (toolbar Reset + modal confirm) */
+.btn--danger {
+  background: #b91c1c;
+  color: #fff;
+  border-color: #b91c1c;
+}
+.btn--danger:hover {
+  background: #950606;
+  border-color: #950606;
+  box-shadow: 0 10px 22px rgba(220, 38, 38, 0.25);
+}
+
+/* Confirm modal */
+.confirm-card {
+  width: min(92vw, 420px);
+}
+.confirm-message {
+  margin: 0 0 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--muted);
 }
