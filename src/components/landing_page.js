@@ -1,7 +1,7 @@
 import React from "react";
 import DevicePicker from "./device_picker";
 
-export default function LandingPage({ onDeviceSelect }) {
+export default function LandingPage({ onDeviceSelect, currentDeviceName = "" }) {
   return (
     <div className="landing">
       <div className="landing__inner">
@@ -15,7 +15,7 @@ export default function LandingPage({ onDeviceSelect }) {
             Choose your iPhone model:
           </label>
           <div className="card__row" id="device-picker">
-            <DevicePicker value="" onSelect={onDeviceSelect} />
+            <DevicePicker value={currentDeviceName} onSelect={onDeviceSelect} />
           </div>
           <div className="hint">You can still change the model later.</div>
         </div>

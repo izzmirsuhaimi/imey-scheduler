@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import ConfirmModal from "./confirm_modal";
 import { DEFAULT_CELL_COLOR } from "../constants/defaults";
 import { getShortDayName } from "../constants/days";
 
@@ -27,6 +28,7 @@ export default function EditClassModal({
   const [startTime, setStartTime] = useState("09:00");
   const [endTime, setEndTime] = useState("10:00");
   const [cellColor, setCellColor] = useState(DEFAULT_CELL_COLOR);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const nameRef = useRef(null);
 
   useModalBodyLock(visible);
@@ -67,8 +69,10 @@ export default function EditClassModal({
   }
 
   function handleDelete() {
-    const confirmed = window.confirm("Delete this class? This cannot be undone.");
-    if (!confirmed) return;
+    setShowDeleteConfirm(true);
+  }
+
+  function handleDeleteConfirmed() {
     onDeleteClass?.(initialData?.id ?? initialData);
     onClose?.();
   }
@@ -179,6 +183,15 @@ export default function EditClassModal({
           </div>
         </div>
       </div>
+
+      <ConfirmModal
+        visible={showDeleteConfirm}
+        title="Delete class?"
+        message="This will permanently remove this class from your timetable. This cannot be undone."
+        confirmLabel="Delete"
+        onConfirm={handleDeleteConfirmed}
+        onCancel={() => setShowDeleteConfirm(false)}
+      />
     </div>
   );
 }

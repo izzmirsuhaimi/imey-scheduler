@@ -135,6 +135,18 @@ body {
   letter-spacing: -0.02em;
   margin: 0;
 }
+.brand--clickable {
+  cursor: pointer;
+  user-select: none;
+}
+.brand--clickable:hover {
+  opacity: 0.8;
+}
+.brand--clickable:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(165, 180, 252, 0.45);
+  border-radius: 6px;
+}
 
 
 /* Align rows with the header width/padding */
@@ -800,4 +812,26 @@ body {
 }
 .btn-strip + .btn-strip {
   border-top: none;
+}
+/* Solid danger button (toolbar Reset + modal confirm) */
+.btn--danger {
+  background: #b91c1c;
+  color: #fff;
+  border-color: #b91c1c;
+}
+.btn--danger:hover {
+  background: #950606;
+  border-color: #950606;
+  box-shadow: 0 10px 22px rgba(220, 38, 38, 0.25);
+}
+
+/* Confirm modal */
+.confirm-card {
+  width: min(92vw, 420px);
+}
+.confirm-message {
+  margin: 0 0 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--muted);
 }

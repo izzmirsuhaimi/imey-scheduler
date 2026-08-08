@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useCallback, useRef, useState, useEffect } from "react";
 import LandingPage from "./components/landing_page";
 import EditorHeader from "./components/editor_header";
 import DaysPicker from "./components/days_picker";
@@ -8,11 +8,22 @@ import EditClassModal from "./components/edit_class_modal";
 import SettingsModal from "./components/settings_modal";
 import BackgroundCropperModal from "./components/background_cropper_modal";
 import TimetableGrid from "./components/timetable_grid";
+import ConfirmModal from "./components/confirm_modal";
+import useLocalStorage from "./hooks/use_local_storage";
 import { exportTimetableImage } from "./utils/export_timetable";
 import { checkOverlap, canDeleteHour } from "./utils/schedule";
 import { DEFAULT_HOURS, DEFAULT_SETTINGS } from "./constants/defaults";
 import { DEFAULT_SELECTED_DAYS } from "./constants/days";
 import { getPreviewScale, getSafeAreaOffset } from "./constants/devices";
+
+const STORAGE_KEYS = {
+  DEVICE: "imey_scheduler:device",
+  HOURS: "imey_scheduler:hours",
+  DAYS: "imey_scheduler:days",
+  CLASSES: "imey_scheduler:classes",
+  SETTINGS: "imey_scheduler:settings",
+  BACKGROUND: "imey_scheduler:background",
+};
 
 function createClassId() {
   if (typeof crypto !== "undefined" && crypto.randomUUID) return crypto.randomUUID();
@@ -20,11 +31,16 @@ function createClassId() {
 }
 
 export default function App() {
-  const [device, setDevice] = useState(null);
-  const [visibleHours, setVisibleHours] = useState(DEFAULT_HOURS);
-  const [selectedDays, setSelectedDays] = useState(DEFAULT_SELECTED_DAYS);
-  const [classes, setClasses] = useState([]);
-  const [settings, setSettings] = useState(DEFAULT_SETTINGS);
+  const [device, setDevice] = useLocalStorage(STORAGE_KEYS.DEVICE, null);
+  const [visibleHours, setVisibleHours] = useLocalStorage(STORAGE_KEYS.HOURS, DEFAULT_HOURS);
+  const [selectedDays, setSelectedDays] = useLocalStorage(
+    STORAGE_KEYS.DAYS,
+    DEFAULT_SELECTED_DAYS
+  );
+  const [classes, setClasses] = useLocalStorage(STORAGE_KEYS.CLASSES, []);
+  const [settings, setSettings] = useLocalStorage(STORAGE_KEYS.SETTINGS, DEFAULT_SETTINGS, {
+    mergeWithDefaults: true,
+  });
   const [previewSettings, setPreviewSettings] = useState(settings);
 
   const [showAddModal, setShowAddModal] = useState(false);
@@ -32,12 +48,28 @@ export default function App() {
   const [editingClass, setEditingClass] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
   const [showCropper, setShowCropper] = useState(false);
-
-  const [rawImage, setRawImage] = useState(null);
-  const [backgroundImage, setBackgroundImage] = useState(null);
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
+  const [showLanding, setShowLanding] = useState(false);
 
   const imageInputRef = useRef(null);
   const timetableRef = useRef(null);
+
+  const backgroundSaveWarnedRef = useRef(false);
+  const notifyBackgroundSaveFailed = useCallback(() => {
+    if (backgroundSaveWarnedRef.current) return;
+    backgroundSaveWarnedRef.current = true;
+    alert(
+      "Your background image is too large to persist in this browser. " +
+        "It will not survive a page refresh."
+    );
+  }, []);
+
+  const [backgroundImage, setBackgroundImage] = useLocalStorage(
+    STORAGE_KEYS.BACKGROUND,
+    null,
+    { onError: notifyBackgroundSaveFailed }
+  );
+  const [rawImage, setRawImage] = useState(null);
 
   useEffect(() => {
     if (showSettings) setPreviewSettings(settings);
@@ -85,6 +117,16 @@ export default function App() {
     setClasses((previous) => previous.filter((entry) => entry.id !== id));
   }
 
+  function resetProgress() {
+    setVisibleHours(DEFAULT_HOURS);
+    setSelectedDays(DEFAULT_SELECTED_DAYS);
+    setClasses([]);
+    setSettings(DEFAULT_SETTINGS);
+    setBackgroundImage(null);
+    setPreviewSettings(DEFAULT_SETTINGS);
+    setShowResetConfirm(false);
+  }
+
   function openClassEditor(entry) {
     setEditingClass(entry);
     setShowEditModal(true);
@@ -111,13 +153,25 @@ export default function App() {
     }
   }
 
-  if (!device) {
-    return <LandingPage onDeviceSelect={setDevice} />;
+  if (!device || showLanding) {
+    return (
+      <LandingPage
+        currentDeviceName={device?.name}
+        onDeviceSelect={(selected) => {
+          setDevice(selected);
+          setShowLanding(false);
+        }}
+      />
+    );
   }
 
   return (
     <div className="app-editor">
-      <EditorHeader device={device} onDeviceSelect={setDevice} />
+      <EditorHeader
+        device={device}
+        onDeviceSelect={setDevice}
+        onBrandClick={() => setShowLanding(true)}
+      />
 
       <div className="btn-strip">
         <div className="editor-row">
@@ -133,6 +187,9 @@ export default function App() {
             </button>
             <button className="btn btn--primary" onClick={downloadTimetable}>
               Download as Image
+            </button>
+            <button className="btn btn--danger" onClick={() => setShowResetConfirm(true)}>
+              Reset
             </button>
           </div>
         </div>
@@ -216,6 +273,15 @@ export default function App() {
           onClose={() => setShowCropper(false)}
         />
       )}
+
+      <ConfirmModal
+        visible={showResetConfirm}
+        title="Reset everything?"
+        message="This will permanently delete your classes, settings, time rows, and background image. This cannot be undone."
+        confirmLabel="Reset"
+        onConfirm={resetProgress}
+        onCancel={() => setShowResetConfirm(false)}
+      />
     </div>
   );
 }
