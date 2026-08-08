@@ -47,17 +47,19 @@ export default function EditClassModal({
   }
 
   function handleSave() {
+    if (!className || selectedDays.length === 0) return;
+
     const payload = {
-      ...initialData,           // keep id/whatever else parent needs
+      ...initialData,
       className,
       location,
       days: selectedDays,
       startTime,
       endTime,
-      cellColor
+      cellColor,
     };
-    onEditClass?.(payload);
-    onClose?.();
+    const ok = onEditClass?.(payload);
+    if (ok !== false) onClose?.();
   }
 
   function handleDelete() {
