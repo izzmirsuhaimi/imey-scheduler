@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/imey-scheduler/static/css/main.41c243e1.css",
-    "main.js": "/imey-scheduler/static/js/main.77b26b23.js",
-    "static/js/453.d0ce4a79.chunk.js": "/imey-scheduler/static/js/453.d0ce4a79.chunk.js",
+    "main.css": "/imey-scheduler/static/css/main.d93bee77.css",
+    "main.js": "/imey-scheduler/static/js/main.ede11280.js",
+    "static/js/453.3302fa4d.chunk.js": "/imey-scheduler/static/js/453.3302fa4d.chunk.js",
     "index.html": "/imey-scheduler/index.html",
-    "main.41c243e1.css.map": "/imey-scheduler/static/css/main.41c243e1.css.map",
-    "main.77b26b23.js.map": "/imey-scheduler/static/js/main.77b26b23.js.map",
-    "453.d0ce4a79.chunk.js.map": "/imey-scheduler/static/js/453.d0ce4a79.chunk.js.map"
+    "main.d93bee77.css.map": "/imey-scheduler/static/css/main.d93bee77.css.map",
+    "main.ede11280.js.map": "/imey-scheduler/static/js/main.ede11280.js.map",
+    "453.3302fa4d.chunk.js.map": "/imey-scheduler/static/js/453.3302fa4d.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.41c243e1.css",
-    "static/js/main.77b26b23.js"
+    "static/css/main.d93bee77.css",
+    "static/js/main.ede11280.js"
   ]
 }
