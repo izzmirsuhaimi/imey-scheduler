@@ -14,7 +14,7 @@ import { exportTimetableImage } from "./utils/export_timetable";
 import { checkOverlap, canDeleteHour } from "./utils/schedule";
 import { DEFAULT_HOURS, DEFAULT_SETTINGS } from "./constants/defaults";
 import { DEFAULT_SELECTED_DAYS } from "./constants/days";
-import { getPreviewScale, getSafeAreaOffset } from "./constants/devices";
+import { DEVICE_OPTIONS, getPreviewScale, getSafeAreaPreview, getCardSize, getTextScale } from "./constants/devices";
 
 const STORAGE_KEYS = {
   DEVICE: "imey_scheduler:device",
@@ -76,8 +76,15 @@ export default function App() {
   }, [showSettings, settings]);
 
   const activeSettings = showSettings ? previewSettings : settings;
-  const previewSize = device ? getPreviewScale(device) : null;
-  const safeAreaOffset = device ? getSafeAreaOffset(device.name) : 0;
+  const currentDevice = device
+    ? DEVICE_OPTIONS.find((entry) => entry.id === device.id) ?? null
+    : null;
+  const previewSize = currentDevice ? getPreviewScale(currentDevice) : null;
+  const safeAreaOffset = currentDevice
+    ? getSafeAreaPreview(currentDevice, previewSize.width)
+    : 0;
+  const cardSize = currentDevice ? getCardSize(currentDevice, previewSize) : null;
+  const textScale = cardSize ? getTextScale(cardSize.width) : 1;
   const sortedHours = [...visibleHours].sort((a, b) => a - b);
 
   function addHour(hour) {
@@ -144,19 +151,19 @@ export default function App() {
   }
 
   async function downloadTimetable() {
-    if (!timetableRef.current || !device || !previewSize) return;
+    if (!timetableRef.current || !currentDevice || !previewSize) return;
     try {
-      await exportTimetableImage(timetableRef.current, device, previewSize.width);
+      await exportTimetableImage(timetableRef.current, currentDevice, previewSize.width);
     } catch (error) {
       console.error("Export failed:", error);
       alert("Export failed: " + (error.message || error));
     }
   }
 
-  if (!device || showLanding) {
+  if (!currentDevice || showLanding) {
     return (
       <LandingPage
-        currentDeviceName={device?.name}
+        currentDevice={currentDevice}
         onDeviceSelect={(selected) => {
           setDevice(selected);
           setShowLanding(false);
@@ -168,7 +175,7 @@ export default function App() {
   return (
     <div className="app-editor">
       <EditorHeader
-        device={device}
+        device={currentDevice}
         onDeviceSelect={setDevice}
         onBrandClick={() => setShowLanding(true)}
       />
@@ -223,6 +230,9 @@ export default function App() {
         width={previewSize.width}
         height={previewSize.height}
         safeAreaOffset={safeAreaOffset}
+        cardWidth={cardSize.width}
+        cardHeight={cardSize.height}
+        textScale={textScale}
         sortedHours={sortedHours}
         selectedDays={selectedDays}
         classes={classes}
@@ -264,8 +274,8 @@ export default function App() {
       {showCropper && rawImage && (
         <BackgroundCropperModal
           imageSrc={rawImage}
-          width={device.width}
-          height={device.height}
+          width={currentDevice.width}
+          height={currentDevice.height}
           onCropComplete={(croppedUrl) => {
             setBackgroundImage(croppedUrl);
             setShowCropper(false);
