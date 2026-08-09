@@ -1,39 +1,73 @@
-export const IPHONE_MODELS = [
-  { name: "iPhone 16 Pro Max", width: 1320, height: 2868 },
-  { name: "iPhone 14/15 Pro Max", width: 1290, height: 2796 },
-  { name: "iPhone 16 Pro", width: 1206, height: 2622 },
-  { name: "iPhone 14/15 Pro", width: 1179, height: 2556 },
-  { name: "iPhone 15/16 Plus", width: 1290, height: 2796 },
-  { name: "iPhone 14 Plus", width: 1284, height: 2778 },
-  { name: "iPhone 15/16", width: 1179, height: 2556 },
-  { name: "iPhone 13/14", width: 1170, height: 2532 },
-  { name: "iPhone 12/13 Mini", width: 1080, height: 2340 },
+export const DEVICE_CATEGORIES = [
+  {
+    label: "Phones",
+    devices: [
+      // { id: "phone-9-16", name: "9:16", width: 1080, height: 1920, safeAreaTop: 132 },
+      { id: "phone-9-19-5", name: "9:19.5", width: 1080, height: 2340, safeAreaTop: 177 },
+      { id: "phone-9-20", name: "9:20", width: 1080, height: 2400, safeAreaTop: 177 },
+    ],
+  },
+  {
+    label: "Tablets",
+    devices: [
+      { id: "tablet-4-3", name: "3:4", width: 1536, height: 2048 },
+      { id: "tablet-16-10", name: "10:16", width: 2560, height: 1600 },
+    ],
+  },
+  {
+    label: "Monitors",
+    devices: [
+      { id: "monitor-16-9", name: "16:9", width: 2560, height: 1440 },
+      { id: "monitor-16-10", name: "16:10", width: 2560, height: 1600 },
+      { id: "monitor-21-9", name: "21:9 (Ultrawide - in progress)", width: 3440, height: 1440 },
+      // { id: "monitor-32-9", name: "32:9 (Super UltraWide)", width: 5120, height: 1440 },
+    ],
+  },
 ];
 
-const DYNAMIC_ISLAND_MODELS = new Set([
-  "iPhone 16 Pro Max",
-  "iPhone 14/15 Pro Max",
-  "iPhone 16 Pro",
-  "iPhone 14/15 Pro",
-  "iPhone 15/16 Plus",
-  "iPhone 15/16",
-]);
+export const DEVICE_OPTIONS = DEVICE_CATEGORIES.flatMap((category) =>
+  category.devices.map((device) => ({ ...device, category: category.label }))
+);
 
-const NOTCH_MODELS = new Set([
-  "iPhone 14 Plus",
-  "iPhone 13/14",
-  "iPhone 12/13 Mini",
-]);
-
-export function getSafeAreaOffset(deviceName) {
-  if (DYNAMIC_ISLAND_MODELS.has(deviceName)) return 59;
-  if (NOTCH_MODELS.has(deviceName)) return 44;
-  return 0;
+export function getPreviewScale(device, maxPreviewWidth = 900) {
+  if (device.category === "Phones") {
+    const scale = Math.min(1 / 3, maxPreviewWidth / device.width);
+    return {
+      width: Math.round(device.width * scale),
+      height: Math.round(device.height * scale),
+    };
+  }
+  // Tablets/Monitors: allow a much wider preview so content stays legible
+  const wideMax = 1100; // tune this to your layout
+  const scale = Math.min(1, wideMax / device.width);
+  return {
+    width: Math.round(device.width * scale),
+    height: Math.round(device.height * scale),
+  };
 }
 
-export function getPreviewScale(device) {
+export function getSafeAreaPreview(device, previewWidth) {
+  const scale = device.width / previewWidth;
+  return Math.round((device.safeAreaTop ?? 0) / scale);
+}
+
+export function getCardSize(device, previewSize, marginRatio = 0.03) {
+  if (device.category === "Phones") {
+    return { width: previewSize.width, height: previewSize.height };
+  }
+  const ratio = 9 / 19.5;
+  const maxW = previewSize.width * (1 - marginRatio * 2);
+  const maxH = previewSize.height * (1 - marginRatio * 2);
+  const height = Math.min(maxH, maxW / ratio);
+  const width = height * ratio;
   return {
-    width: Math.round(device.width / 3),
-    height: Math.round(device.height / 3),
+    width: Math.round(width),
+    height: Math.round(height),
   };
+}
+
+const BASE_CARD_WIDTH = 360;
+
+export function getTextScale(cardWidth, minScale = 0.45) {
+  return Math.max(minScale, Math.min(1, cardWidth / BASE_CARD_WIDTH));
 }

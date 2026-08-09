@@ -22,11 +22,11 @@ export default function EditorHeader({ device, onDeviceSelect, onBrandClick }) {
             imey‑scheduler
           </h1>
           <p className="tagline">
-            Create a clean, aesthetic timetable wallpaper for your lockscreen.
+            Create a clean, aesthetic timetable wallpaper for your screen.
           </p>
         </div>
         <div className="editor-row">
-          <DevicePicker value={device.name} onSelect={onDeviceSelect} />
+          <DevicePicker value={device.id} onSelect={onDeviceSelect} />
         </div>
       </div>
     </header>

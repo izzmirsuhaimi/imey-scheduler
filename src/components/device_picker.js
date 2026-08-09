@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { IPHONE_MODELS } from "../constants/devices";
+import { DEVICE_CATEGORIES } from "../constants/devices";
 
 export default function DevicePicker({ onSelect, value = "" }) {
   const [selected, setSelected] = useState(value);
@@ -9,10 +9,14 @@ export default function DevicePicker({ onSelect, value = "" }) {
   }, [value]);
 
   function handleChange(event) {
-    const modelName = event.target.value;
-    setSelected(modelName);
-    const model = IPHONE_MODELS.find((entry) => entry.name === modelName);
-    if (model) onSelect(model);
+    const deviceId = event.target.value;
+    setSelected(deviceId);
+    if (deviceId === "") return;
+
+    const device = DEVICE_CATEGORIES.flatMap((category) => category.devices).find(
+      (entry) => entry.id === deviceId
+    );
+    if (device) onSelect(device);
   }
 
   return (
@@ -21,15 +25,19 @@ export default function DevicePicker({ onSelect, value = "" }) {
         className="select-modern"
         value={selected}
         onChange={handleChange}
-        aria-label="Select iPhone model"
+        aria-label="Select screen ratio"
       >
         <option value="" disabled>
-          Select model
+          Select ratio
         </option>
-        {IPHONE_MODELS.map((model) => (
-          <option key={model.name} value={model.name}>
-            {model.name} ({model.width}×{model.height})
-          </option>
+        {DEVICE_CATEGORIES.map((category) => (
+          <optgroup key={category.label} label={category.label}>
+            {category.devices.map((device) => (
+              <option key={device.id} value={device.id}>
+                {device.name} ({device.width}×{device.height})
+              </option>
+            ))}
+          </optgroup>
         ))}
       </select>
     </div>

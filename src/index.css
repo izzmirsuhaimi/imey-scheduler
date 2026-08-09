@@ -762,13 +762,11 @@ body {
 
 
 /* ---------- Timetable grid (TimetableGrid component) ---------- */
-.timetable-grid {
+.timetable-canvas {
   position: relative;
   background: #fff;
-  overflow: hidden;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
 }
-.timetable-grid__background {
+.timetable-canvas__background {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -777,6 +775,10 @@ body {
   z-index: 0;
   pointer-events: none;
   user-select: none;
+}
+.timetable-grid {
+  position: relative;
+  overflow: hidden;
 }
 .timetable-grid__time-axis {
   position: absolute;
