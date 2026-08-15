@@ -26,10 +26,10 @@ export default function EditorHeader({
               }
             }}
           >
-            imey‑scheduler
+            The Scheduler-inator!
           </h1>
           <p className="tagline">
-            Create a clean, aesthetic timetable wallpaper for your screen.
+            Website name was inspired by Dr Heinz Doofenshmirtz.
           </p>
         </div>
         <div className="editor-row editor-topbar">
