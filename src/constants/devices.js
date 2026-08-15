@@ -19,7 +19,7 @@ export const DEVICE_CATEGORIES = [
     devices: [
       { id: "monitor-16-9", name: "16:9", width: 2560, height: 1440 },
       { id: "monitor-16-10", name: "16:10", width: 2560, height: 1600 },
-      { id: "monitor-21-9", name: "21:9 (Ultrawide - in progress)", width: 3440, height: 1440 },
+      { id: "monitor-21-9", name: "21:9 (Ultrawide)", width: 3440, height: 1440 },
       // { id: "monitor-32-9", name: "32:9 (Super UltraWide)", width: 5120, height: 1440 },
     ],
   },
@@ -28,6 +28,8 @@ export const DEVICE_CATEGORIES = [
 export const DEVICE_OPTIONS = DEVICE_CATEGORIES.flatMap((category) =>
   category.devices.map((device) => ({ ...device, category: category.label }))
 );
+
+export const DEFAULT_DEVICE_ID = "phone-9-19-5";
 
 export function getPreviewScale(device, maxPreviewWidth = 900) {
   if (device.category === "Phones") {
