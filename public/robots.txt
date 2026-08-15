@@ -2,4 +2,4 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://timetably.app/sitemap.xml
+Sitemap: https://scheduler-inator.site/sitemap.xml
