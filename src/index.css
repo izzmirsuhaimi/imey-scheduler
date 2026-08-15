@@ -76,6 +76,51 @@ body {
   font-size: 12px;
   color: var(--muted);
 }
+/* Landing: SEO content blocks */
+.landing__seo {
+  margin-top: 28px;
+}
+.landing__seo-title {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  margin: 0 0 8px;
+  color: var(--text);
+}
+.landing__seo-text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--muted);
+  margin: 0 0 12px;
+}
+.landing__seo-list {
+  list-style: disc;
+  padding-left: 20px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text);
+  margin: 0;
+}
+.landing__faq {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--edge);
+}
+.landing__faq details {
+  margin-bottom: 8px;
+}
+.landing__faq summary {
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text);
+}
+.landing__faq p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 6px 0 0;
+}
 
 
 
