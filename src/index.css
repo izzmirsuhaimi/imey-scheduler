@@ -948,6 +948,17 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  padding-bottom: 8px;
+}
+.editor-topbar .select-modern {
+  margin-bottom: 0;
+  height: 40px;
+  box-sizing: border-box;
+}
+.editor-topbar .theme-toggle {
+  height: 40px;
+  box-sizing: border-box;
+  padding: 0 12px 0 8px;
 }
 /* Landing page: toggle top-right corner */
 .landing {
@@ -958,6 +969,15 @@ body {
   top: 20px;
   right: 24px;
   z-index: 10;
+}
+/* On phones, let the toggle sit in normal flow above the content
+   so it never overlaps the title */
+@media (max-width: 767px) {
+  .landing__toggle {
+    position: static;
+    justify-self: end;
+    margin: 0 0 16px;
+  }
 }
 /* Landing: dropdown + Create button same height, aligned */
 .card__row .select-modern,
