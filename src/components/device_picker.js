@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { DEVICE_CATEGORIES } from "../constants/devices";
+import { DEVICE_CATEGORIES, DEFAULT_DEVICE_ID } from "../constants/devices";
 
 export default function DevicePicker({ onSelect, value = "" }) {
-  const [selected, setSelected] = useState(value);
+  const [selected, setSelected] = useState(value || DEFAULT_DEVICE_ID);
 
   useEffect(() => {
-    setSelected(value ?? "");
+    setSelected(value || DEFAULT_DEVICE_ID);
   }, [value]);
 
   function handleChange(event) {
     const deviceId = event.target.value;
     setSelected(deviceId);
-    if (deviceId === "") return;
 
     const device = DEVICE_CATEGORIES.flatMap((category) => category.devices).find(
       (entry) => entry.id === deviceId
@@ -27,9 +26,6 @@ export default function DevicePicker({ onSelect, value = "" }) {
         onChange={handleChange}
         aria-label="Select screen ratio"
       >
-        <option value="" disabled>
-          Select ratio
-        </option>
         {DEVICE_CATEGORIES.map((category) => (
           <optgroup key={category.label} label={category.label}>
             {category.devices.map((device) => (

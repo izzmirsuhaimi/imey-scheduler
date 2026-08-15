@@ -10,6 +10,7 @@ import BackgroundCropperModal from "./components/background_cropper_modal";
 import TimetableGrid from "./components/timetable_grid";
 import ConfirmModal from "./components/confirm_modal";
 import useLocalStorage from "./hooks/use_local_storage";
+import useTheme from "./hooks/use_theme";
 import { exportTimetableImage } from "./utils/export_timetable";
 import { checkOverlap, canDeleteHour } from "./utils/schedule";
 import { DEFAULT_HOURS, DEFAULT_SETTINGS } from "./constants/defaults";
@@ -50,6 +51,8 @@ export default function App() {
   const [showCropper, setShowCropper] = useState(false);
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [showLanding, setShowLanding] = useState(false);
+
+  const { theme, toggleTheme } = useTheme();
 
   const imageInputRef = useRef(null);
   const timetableRef = useRef(null);
@@ -164,7 +167,10 @@ export default function App() {
     return (
       <LandingPage
         currentDevice={currentDevice}
-        onDeviceSelect={(selected) => {
+        theme={theme}
+        onToggleTheme={toggleTheme}
+        onCreate={(selected) => {
+          if (!selected) return;
           setDevice(selected);
           setShowLanding(false);
         }}
@@ -176,6 +182,8 @@ export default function App() {
     <div className="app-editor">
       <EditorHeader
         device={currentDevice}
+        theme={theme}
+        onToggleTheme={toggleTheme}
         onDeviceSelect={setDevice}
         onBrandClick={() => setShowLanding(true)}
       />

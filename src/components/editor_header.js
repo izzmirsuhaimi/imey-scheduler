@@ -1,7 +1,14 @@
 import React from "react";
 import DevicePicker from "./device_picker";
+import ThemeToggle from "./theme_toggle";
 
-export default function EditorHeader({ device, onDeviceSelect, onBrandClick }) {
+export default function EditorHeader({
+  device,
+  theme,
+  onToggleTheme,
+  onDeviceSelect,
+  onBrandClick,
+}) {
   return (
     <header className="ui-toolbar">
       <div className="editor-header">
@@ -25,8 +32,9 @@ export default function EditorHeader({ device, onDeviceSelect, onBrandClick }) {
             Create a clean, aesthetic timetable wallpaper for your screen.
           </p>
         </div>
-        <div className="editor-row">
+        <div className="editor-row editor-topbar">
           <DevicePicker value={device.id} onSelect={onDeviceSelect} />
+          <ThemeToggle theme={theme} onToggle={onToggleTheme} />
         </div>
       </div>
     </header>
