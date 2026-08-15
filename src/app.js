@@ -15,7 +15,7 @@ import { exportTimetableImage } from "./utils/export_timetable";
 import { checkOverlap, canDeleteHour } from "./utils/schedule";
 import { DEFAULT_HOURS, DEFAULT_SETTINGS } from "./constants/defaults";
 import { DEFAULT_SELECTED_DAYS } from "./constants/days";
-import { DEVICE_OPTIONS, getPreviewScale, getSafeAreaPreview, getCardSize, getTextScale } from "./constants/devices";
+import { DEVICE_OPTIONS, getPreviewScale, getSafeAreaPreview, getCardSize, getTextScale, isPhoneView, DEFAULT_DEVICE_ID } from "./constants/devices";
 
 const STORAGE_KEYS = {
   DEVICE: "imey_scheduler:device",
@@ -77,6 +77,17 @@ export default function App() {
   useEffect(() => {
     if (showSettings) setPreviewSettings(settings);
   }, [showSettings, settings]);
+
+  useEffect(() => {
+    const savedDevice = device
+      ? DEVICE_OPTIONS.find((entry) => entry.id === device.id) ?? null
+      : null;
+    if (savedDevice && isPhoneView() && savedDevice.category !== "Phones") {
+      const fallback = DEVICE_OPTIONS.find((entry) => entry.id === DEFAULT_DEVICE_ID);
+      if (fallback) setDevice(fallback);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const activeSettings = showSettings ? previewSettings : settings;
   const currentDevice = device
