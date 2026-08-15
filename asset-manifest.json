@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/imey-scheduler/static/css/main.d93bee77.css",
-    "main.js": "/imey-scheduler/static/js/main.ede11280.js",
+    "main.css": "/imey-scheduler/static/css/main.bfe80ba0.css",
+    "main.js": "/imey-scheduler/static/js/main.23739b01.js",
     "static/js/453.3302fa4d.chunk.js": "/imey-scheduler/static/js/453.3302fa4d.chunk.js",
     "index.html": "/imey-scheduler/index.html",
-    "main.d93bee77.css.map": "/imey-scheduler/static/css/main.d93bee77.css.map",
-    "main.ede11280.js.map": "/imey-scheduler/static/js/main.ede11280.js.map",
+    "main.bfe80ba0.css.map": "/imey-scheduler/static/css/main.bfe80ba0.css.map",
+    "main.23739b01.js.map": "/imey-scheduler/static/js/main.23739b01.js.map",
     "453.3302fa4d.chunk.js.map": "/imey-scheduler/static/js/453.3302fa4d.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.d93bee77.css",
-    "static/js/main.ede11280.js"
+    "static/css/main.bfe80ba0.css",
+    "static/js/main.23739b01.js"
   ]
 }
