@@ -73,3 +73,16 @@ const BASE_CARD_WIDTH = 360;
 export function getTextScale(cardWidth, minScale = 0.45) {
   return Math.max(minScale, Math.min(1, cardWidth / BASE_CARD_WIDTH));
 }
+
+export function isPhoneView() {
+  if (typeof window === "undefined") return false;
+  const smallScreen =
+    window.matchMedia && window.matchMedia("(max-width: 767px)").matches;
+  const coarsePointer =
+    window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
+  const ua = navigator.userAgent || "";
+  const phoneUA =
+    /iPhone|iPod|Opera Mini/i.test(ua) ||
+    (/Android/i.test(ua) && /Mobile/i.test(ua));
+  return (smallScreen && coarsePointer) || phoneUA;
+}
