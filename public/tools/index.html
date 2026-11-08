@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tools — The Scheduler-inator!</title>
+  <meta name="description" content="Free productivity and personal finance tools: compound interest calculator, savings goal calculator, and a timetable wallpaper maker." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://scheduler-inator.site/tools/" />
+  <link rel="stylesheet" href="/site.css" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5634929249074016" crossorigin="anonymous"></script>
+  <script>
+    (function () {
+      try {
+        var stored = JSON.parse(localStorage.getItem("imey_scheduler:theme"));
+        if (stored !== "light" && stored !== "dark") {
+          stored =
+            window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light";
+        }
+        document.documentElement.dataset.theme = stored;
+      } catch (error) {}
+    })();
+  </script>
+  <script src="/site.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/#landing">The Scheduler-inator!</a>
+    <div class="header-right">
+    <nav class="site-nav">
+      <a href="/#landing">Home</a>
+      <a href="/guides/">Guides</a>
+      <a href="/tools/">Tools</a>
+      <a href="/about.html">About</a>
+      <a href="/contact.html">Contact</a>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Toggle theme" role="switch" aria-checked="false">
+      <span class="theme-toggle__track" aria-hidden="true">
+        <span class="theme-toggle__knob">
+          <svg class="icon-sun" viewBox="0 0 20 20" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M10 14a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0-11a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 10 3Zm0 11.75a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5a.75.75 0 0 1 .75-.75ZM16.25 10a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5a.75.75 0 0 1 .75.75ZM6 10a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 6 10Zm8.53-3.97a.75.75 0 0 1 0 1.06l-1.06 1.06a.75.75 0 1 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0Zm-6.54 6.02a.75.75 0 0 1 0 1.06l-1.06 1.06a.75.75 0 1 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0Zm7.6-1.6a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5a.75.75 0 0 1 .75.75ZM6.54 5.2a.75.75 0 0 1 0 1.06L5.48 7.32a.75.75 0 1 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0Z"/></svg>
+          <svg class="icon-moon" viewBox="0 0 20 20" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M14.28 12.44a6.5 6.5 0 0 1-8.72-8.72.75.75 0 0 0-.95-.99A8 8 0 1 0 15.27 14.6a.75.75 0 0 0-.99-.95Z"/></svg>
+        </span>
+      </span>
+      <span class="theme-toggle__label">Light</span>
+    </button>
+  </div>
+  </header>
+  <main class="container">
+    <p class="breadcrumbs"><a href="/#landing">Home</a> / Tools</p>
+    <h1>Tools</h1>
+    <p class="muted">Free, browser-based tools for organization and personal finance. Everything runs locally — your inputs stay on your device.</p>
+
+    <h2 class="tools-group-title" style="margin-top:8px">Study &amp; productivity</h2>
+    <ul class="guide-list">
+      <li>
+        <a href="/">Timetable Wallpaper Maker</a>
+        <span class="tag">Productivity</span>
+        <p class="small">Turn your class schedule into a clean, aesthetic wallpaper for any screen.</p>
+      </li>
+      <li>
+        <a href="/tools/pomodoro.html">Pomodoro Timer</a>
+        <span class="tag">Productivity</span>
+        <p class="small">25-minute focus sessions with 5-minute breaks.</p>
+      </li>
+      <li>
+        <a href="/tools/gpa-calculator.html">GPA / Grade Calculator</a>
+        <span class="tag">Study</span>
+        <p class="small">Compute your GPA on a 4.0 scale from courses, credits, and grades.</p>
+      </li>
+    </ul>
+
+    <h2 class="tools-group-title" style="margin-top:16px">Finance</h2>
+    <ul class="guide-list">
+      <li>
+        <a href="/tools/budget-planner.html">Budget Planner (50/30/20)</a>
+        <span class="tag">Finance</span>
+        <p class="small">Split your monthly income into needs, wants, and savings.</p>
+      </li>
+      <li>
+        <a href="/tools/compound-interest.html">Compound Interest Calculator</a>
+        <span class="tag">Finance</span>
+        <p class="small">See how savings or investments grow over time with regular contributions.</p>
+      </li>
+      <li>
+        <a href="/tools/savings-goal.html">Savings Goal Calculator</a>
+        <span class="tag">Finance</span>
+        <p class="small">Find out how much to save each month to reach a target by a deadline.</p>
+      </li>
+      <li>
+        <a href="/tools/loan-calculator.html">Loan / EMI Calculator</a>
+        <span class="tag">Finance</span>
+        <p class="small">Monthly payment, total interest, and total repayment for any loan.</p>
+      </li>
+      <li>
+        <a href="/tools/emergency-fund.html">Emergency Fund Calculator</a>
+        <span class="tag">Finance</span>
+        <p class="small">Target amount and monthly savings needed for 3�12 months of expenses.</p>
+      </li>
+    </ul>
+
+    <h2 class="tools-group-title" style="margin-top:16px">Malaysia-focused finance</h2>
+    <ul class="guide-list">
+      <li>
+        <a href="/tools/asb-calculator.html">ASB Investment Calculator (Malaysia)</a>
+        <span class="tag">Finance</span>
+        <p class="small">Project ASB dividends, growth, and time to reach the RM300,000 cap.</p>
+      </li>
+      <li>
+        <a href="/tools/epf-calculator.html">EPF (KWSP) Calculator</a>
+        <span class="tag">Finance</span>
+        <p class="small">Project your retirement savings with contributions and dividends.</p>
+      </li>
+      <li>
+        <a href="/tools/income-tax-calculator.html">Income Tax Calculator</a>
+        <span class="tag">Finance</span>
+        <p class="small">Estimate Malaysian personal income tax (LHDN brackets).</p>
+      </li>
+      <li>
+        <a href="/tools/zakat-calculator.html">Zakat Calculator</a>
+        <span class="tag">Finance</span>
+        <p class="small">Zakat harta, pendapatan, and fitrah.</p>
+      </li>
+      <li>
+        <a href="/tools/car-loan-calculator.html">Car Loan Calculator</a>
+        <span class="tag">Finance</span>
+        <p class="small">New reducing-balance (EIR) and old flat-rate methods.</p>
+      </li>
+    </ul>
+
+    <h2 class="tools-group-title" style="margin-top:16px">Utilities</h2>
+    <ul class="guide-list">
+      <li>
+        <a href="/tools/unit-converter.html">Unit Converter</a>
+        <span class="tag">Utility</span>
+        <p class="small">Length, weight, temperature, volume, area, speed, time.</p>
+      </li>
+      <li>
+        <a href="/tools/date-difference.html">Date Difference Calculator</a>
+        <span class="tag">Utility</span>
+        <p class="small">Days, weeks, months, years between two dates.</p>
+      </li>
+      <li>
+        <a href="/tools/word-counter.html">Word Counter</a>
+        <span class="tag">Utility</span>
+        <p class="small">Words, characters, sentences, paragraphs, reading time.</p>
+      </li>
+      <li>
+        <a href="/tools/qr-code-generator.html">QR Code Generator</a>
+        <span class="tag">Utility</span>
+        <p class="small">Generate and download QR codes for any text or URL.</p>
+      </li>
+    </ul>
+
+    <div class="card">
+      <h3>Suggest a tool</h3>
+      <p class="muted">Have an idea for a new calculator or timer? <a href="/contact.html">Let us know</a>.</p>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <span>&copy; 2026 The Scheduler-inator! by izzmirsuhaimi</span>
+    <nav>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+      <a href="/about.html">About</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/guides/">Guides</a>
+      <a href="/whats-new.html">What's new</a>
+    </nav>
+  </footer>
+</body>
+</html>

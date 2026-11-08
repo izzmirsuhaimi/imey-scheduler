@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EPF (KWSP) Calculator Malaysia — The Scheduler-inator!</title>
+  <meta name="description" content="Free EPF calculator Malaysia: project your KWSP retirement savings with contributions and dividends." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://scheduler-inator.site/tools/epf-calculator.html" />
+  <link rel="stylesheet" href="/site.css" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5634929249074016" crossorigin="anonymous"></script>
+  <script>
+    (function () {
+      try {
+        var stored = JSON.parse(localStorage.getItem("imey_scheduler:theme"));
+        if (stored !== "light" && stored !== "dark") {
+          stored = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        }
+        document.documentElement.dataset.theme = stored;
+      } catch (e) {}
+    })();
+  </script>
+  <script src="/site.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/#landing">The Scheduler-inator!</a>
+    <div class="header-right">
+      <nav class="site-nav">
+        <a href="/#landing">Home</a>
+        <a href="/guides/">Guides</a>
+        <a href="/tools/">Tools</a>
+        <a href="/about.html">About</a>
+        <a href="/contact.html">Contact</a>
+      </nav>
+      <button class="theme-toggle" type="button" aria-label="Toggle theme" role="switch" aria-checked="false">
+        <span class="theme-toggle__track" aria-hidden="true">
+          <span class="theme-toggle__knob">
+            <svg class="icon-sun" viewBox="0 0 20 20" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M10 14a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0-11a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 10 3Zm0 11.75a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5a.75.75 0 0 1 .75-.75ZM16.25 10a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5a.75.75 0 0 1 .75.75ZM6 10a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 6 10Zm8.53-3.97a.75.75 0 0 1 0 1.06l-1.06 1.06a.75.75 0 1 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0Zm-6.54 6.02a.75.75 0 0 1 0 1.06l-1.06 1.06a.75.75 0 0 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0Zm7.6-1.6a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5a.75.75 0 0 1 .75.75ZM6.54 5.2a.75.75 0 0 1 0 1.06L5.48 7.32a.75.75 0 1 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0Z"/></svg>
+            <svg class="icon-moon" viewBox="0 0 20 20" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M14.28 12.44a6.5 6.5 0 0 1-8.72-8.72.75.75 0 0 0-.95-.99A8 8 0 1 0 15.27 14.6a.75.75 0 0 0-.99-.95Z"/></svg>
+          </span>
+        </span>
+        <span class="theme-toggle__label">Light</span>
+      </button>
+    </div>
+  </header>
+  <main class="container">
+    <p class="breadcrumbs"><a href="/#landing">Home</a> / <a href="/tools/">Tools</a> / EPF calculator</p>
+    <h1>EPF (KWSP) Calculator — Malaysia</h1>
+    <p class="muted">Project your Employees Provident Fund (EPF/KWSP) retirement savings with monthly contributions and dividends.</p>
+
+    <div class="card">
+      <h3>How EPF works</h3>
+      <p>EPF is Malaysia's mandatory retirement savings scheme. Employees contribute <strong>11%</strong> of salary; employers contribute <strong>13%</strong> (salary ≤ RM5,000) or <strong>12%</strong> (salary > RM5,000). Dividends are declared annually (recent: 6.15% for 2025). Since May 2024, 10% of contributions flow to the flexible Akaun Fleksibel (Account 3). Retirement withdrawal age is 55 (full) / 60.</p>
+    </div>
+
+    <div class="card">
+      <div class="calc-grid">
+        <label for="salary">Monthly salary (RM)</label>
+        <input id="salary" type="number" value="5000" min="0" step="100" />
+        <label for="empRate">Employee rate (%)</label>
+        <input id="empRate" type="number" value="11" min="0" step="0.5" />
+        <label for="erRate">Employer rate (%)</label>
+        <input id="erRate" type="number" value="13" min="0" step="0.5" />
+        <label for="current">Current EPF balance (RM)</label>
+        <input id="current" type="number" value="20000" min="0" step="500" />
+        <label for="years">Years to retirement</label>
+        <input id="years" type="number" value="25" min="1" max="45" step="1" />
+        <label for="dividend">Annual dividend (%)</label>
+        <input id="dividend" type="number" value="6.15" min="0" step="0.05" />
+        <label for="voluntary">Voluntary monthly contribution (RM)</label>
+        <input id="voluntary" type="number" value="0" min="0" step="50" />
+      </div>
+      <button class="btn btn--primary" id="calcBtn" style="margin-top:14px">Calculate</button>
+      <div class="result" id="result">
+        <p>Projected balance at retirement: <strong id="balance">RM 0.00</strong></p>
+        <p>Total employee contributions: <strong id="empContrib">RM 0.00</strong></p>
+        <p>Total employer contributions: <strong id="erContrib">RM 0.00</strong></p>
+        <p>Total dividends earned: <strong id="dividends">RM 0.00</strong></p>
+      </div>
+    </div>
+
+    <div class="disclaimer">Disclaimer: For educational purposes only. EPF rates, dividends, and rules change over time. Not financial advice.</div>
+  </main>
+  <footer class="site-footer">
+    <span>&copy; 2026 The Scheduler-inator! by izzmirsuhaimi</span>
+    <nav>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+      <a href="/about.html">About</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/guides/">Guides</a>
+      <a href="/whats-new.html">What's new</a>
+    </nav>
+  </footer>
+  <script>
+    function money(x) { return 'RM ' + x.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+    function calculate() {
+      const salary = parseFloat(document.getElementById('salary').value) || 0;
+      const empRate = (parseFloat(document.getElementById('empRate').value) || 0) / 100;
+      const erRate = (parseFloat(document.getElementById('erRate').value) || 0) / 100;
+      const current = parseFloat(document.getElementById('current').value) || 0;
+      const years = parseInt(document.getElementById('years').value, 10) || 1;
+      const dividend = (parseFloat(document.getElementById('dividend').value) || 0) / 100;
+      const voluntary = parseFloat(document.getElementById('voluntary').value) || 0;
+      const months = years * 12;
+      const mr = dividend / 12;
+      let balance = current;
+      let empTotal = 0, erTotal = 0;
+      for (let i = 0; i < months; i++) {
+        const emp = salary * empRate;
+        const er = salary * erRate;
+        empTotal += emp;
+        erTotal += er;
+        balance = balance * (1 + mr) + emp + er + voluntary;
+      }
+      const totalContrib = empTotal + erTotal + voluntary * months;
+      const dividends = balance - current - totalContrib;
+      document.getElementById('balance').textContent = money(balance);
+      document.getElementById('empContrib').textContent = money(empTotal + voluntary * months);
+      document.getElementById('erContrib').textContent = money(erTotal);
+      document.getElementById('dividends').textContent = money(Math.max(0, dividends));
+    }
+    // auto-set employer rate based on salary
+    function autoER() {
+      const salary = parseFloat(document.getElementById('salary').value) || 0;
+      const er = salary <= 5000 ? 13 : 12;
+      document.getElementById('erRate').value = er;
+      calculate();
+    }
+    document.getElementById('calcBtn').addEventListener('click', calculate);
+    ['current','years','dividend','voluntary','empRate','erRate'].forEach(function (id) {
+      document.getElementById(id).addEventListener('input', calculate);
+    });
+    document.getElementById('salary').addEventListener('input', function () { autoER(); });
+    autoER();
+  </script>
+</body>
+</html>

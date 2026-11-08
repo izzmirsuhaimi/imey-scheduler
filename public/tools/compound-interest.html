@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Compound Interest Calculator — The Scheduler-inator!</title>
+  <meta name="description" content="Free compound interest calculator: see how your savings or investments grow over time with regular contributions." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://scheduler-inator.site/tools/compound-interest.html" />
+  <link rel="stylesheet" href="/site.css" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5634929249074016" crossorigin="anonymous"></script>
+  <script>
+    (function () {
+      try {
+        var stored = JSON.parse(localStorage.getItem("imey_scheduler:theme"));
+        if (stored !== "light" && stored !== "dark") {
+          stored =
+            window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light";
+        }
+        document.documentElement.dataset.theme = stored;
+      } catch (error) {}
+    })();
+  </script>
+  <script src="/site.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/#landing">The Scheduler-inator!</a>
+    <div class="header-right">
+    <nav class="site-nav">
+      <a href="/#landing">Home</a>
+      <a href="/guides/">Guides</a>
+      <a href="/tools/">Tools</a>
+      <a href="/about.html">About</a>
+      <a href="/contact.html">Contact</a>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Toggle theme" role="switch" aria-checked="false">
+      <span class="theme-toggle__track" aria-hidden="true">
+        <span class="theme-toggle__knob">
+          <svg class="icon-sun" viewBox="0 0 20 20" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M10 14a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0-11a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 10 3Zm0 11.75a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5a.75.75 0 0 1 .75-.75ZM16.25 10a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5a.75.75 0 0 1 .75.75ZM6 10a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 6 10Zm8.53-3.97a.75.75 0 0 1 0 1.06l-1.06 1.06a.75.75 0 1 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0Zm-6.54 6.02a.75.75 0 0 1 0 1.06l-1.06 1.06a.75.75 0 1 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0Zm7.6-1.6a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5a.75.75 0 0 1 .75.75ZM6.54 5.2a.75.75 0 0 1 0 1.06L5.48 7.32a.75.75 0 1 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0Z"/></svg>
+          <svg class="icon-moon" viewBox="0 0 20 20" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M14.28 12.44a6.5 6.5 0 0 1-8.72-8.72.75.75 0 0 0-.95-.99A8 8 0 1 0 15.27 14.6a.75.75 0 0 0-.99-.95Z"/></svg>
+        </span>
+      </span>
+      <span class="theme-toggle__label">Light</span>
+    </button>
+  </div>
+  </header>
+  <main class="container">
+    <p class="breadcrumbs"><a href="/#landing">Home</a> / <a href="/tools/">Tools</a> / Compound interest</p>
+    <h1>Compound Interest Calculator</h1>
+    <p class="muted">See how an investment grows when interest earns interest. Adjust the values and results update instantly.</p>
+
+    <div class="card">
+      <div class="calc-grid">
+        <label for="principal">Initial principal ($)</label>
+        <input id="principal" type="number" value="1000" min="0" step="100" />
+
+        <label for="rate">Annual interest rate (%)</label>
+        <input id="rate" type="number" value="7" min="0" step="0.1" />
+
+        <label for="years">Years</label>
+        <input id="years" type="number" value="10" min="1" step="1" />
+
+        <label for="freq">Compounding frequency</label>
+        <select id="freq">
+          <option value="1">Annually</option>
+          <option value="2">Semi-annually</option>
+          <option value="4">Quarterly</option>
+          <option value="12" selected>Monthly</option>
+          <option value="365">Daily</option>
+        </select>
+
+        <label for="monthly">Monthly contribution ($)</label>
+        <input id="monthly" type="number" value="100" min="0" step="10" />
+      </div>
+      <button class="btn btn--primary" id="calcBtn" style="margin-top:14px">Calculate</button>
+
+      <div class="result" id="result">
+        <p>Future value: <strong id="fv">$0.00</strong></p>
+        <p>Total contributions: <strong id="contrib">$0.00</strong></p>
+        <p>Total interest earned: <strong id="interest">$0.00</strong></p>
+      </div>
+    </div>
+
+    <h2>How compound interest works</h2>
+    <p>Compound interest is interest calculated on both the initial principal and the accumulated interest from previous periods. The formula for a lump sum is:</p>
+    <p><code>A = P (1 + r/n)^(nt)</code></p>
+    <ul>
+      <li><strong>P</strong> = principal (initial amount)</li>
+      <li><strong>r</strong> = annual interest rate (decimal)</li>
+      <li><strong>n</strong> = compounding frequency per year</li>
+      <li><strong>t</strong> = time in years</li>
+      <li><strong>A</strong> = final amount</li>
+    </ul>
+    <p>When you add regular monthly contributions, each contribution also compounds from the month it is added. That is why starting early and contributing consistently has such a large effect over long periods.</p>
+
+    <h2>Why it matters for discipline</h2>
+    <p>The math rewards consistency, not intensity. A modest monthly contribution sustained for decades outperforms occasional large deposits. Use this calculator to set a concrete target, then pair it with a budget (see our savings goal calculator) so the contribution becomes automatic.</p>
+
+    <div class="disclaimer">Disclaimer: This calculator is for educational and illustrative purposes only and is not financial advice. Actual returns vary and are not guaranteed. Consult a qualified financial professional before making investment decisions.</div>
+  </main>
+  <footer class="site-footer">
+    <span>&copy; 2026 The Scheduler-inator! by izzmirsuhaimi</span>
+    <nav>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+      <a href="/about.html">About</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/guides/">Guides</a>
+      <a href="/whats-new.html">What's new</a>
+    </nav>
+  </footer>
+
+  <script>
+    function money(x) { return '$' + x.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+    function calculate() {
+      const P = parseFloat(document.getElementById('principal').value) || 0;
+      const r = (parseFloat(document.getElementById('rate').value) || 0) / 100;
+      const t = parseInt(document.getElementById('years').value, 10) || 0;
+      const n = parseInt(document.getElementById('freq').value, 10) || 12;
+      const monthly = parseFloat(document.getElementById('monthly').value) || 0;
+
+      let balance = P;
+      const monthlyRate = r / 12;
+      const months = t * 12;
+      for (let i = 0; i < months; i++) {
+        balance = balance * (1 + monthlyRate) + monthly;
+      }
+      const totalContrib = P + monthly * months;
+      const interest = balance - totalContrib;
+      document.getElementById('fv').textContent = money(balance);
+      document.getElementById('contrib').textContent = money(totalContrib);
+      document.getElementById('interest').textContent = money(interest);
+    }
+    document.getElementById('calcBtn').addEventListener('click', calculate);
+    // live update
+    ['principal','rate','years','freq','monthly'].forEach(id => {
+      document.getElementById(id).addEventListener('input', calculate);
+    });
+    calculate();
+  </script>
+</body>
+</html>

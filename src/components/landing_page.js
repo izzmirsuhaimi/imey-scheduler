@@ -21,7 +21,8 @@ export default function LandingPage({
       <div className="landing__inner">
         <h1 className="brand">The Scheduler-inator!</h1>
         <p className="tagline">
-          Create a clean, aesthetic timetable wallpaper for your screen — right in your browser.
+          A free personal organization toolbox — timetable wallpapers, study guides, and
+          finance calculators to help you build a more disciplined, intentional life.
         </p>
 
         <div className="card">
@@ -39,6 +40,30 @@ export default function LandingPage({
             </button>
           </div>
           <div className="hint">You can still change it later.</div>
+
+          <div className="landing__tools" style={{ marginTop: 20 }}>
+            <h2 className="landing__seo-title">Other tools</h2>
+            <div className="card__row">
+              <a className="btn btn--primary btn--create" href="/tools/asb-calculator.html">
+                ASB Calculator
+              </a>
+              <a
+                className="btn btn--primary btn--create"
+                href="/tools/compound-interest.html"
+              >
+                Compound Interest Calculator
+              </a>
+              <a className="btn btn--primary btn--create" href="/tools/word-counter.html">
+                Word Counter
+              </a>
+              <a className="btn btn--primary btn--create" href="/tools/">
+                All tools
+              </a>
+            </div>
+            <div className="hint">
+              Free, runs in your browser — your inputs stay on your device.
+            </div>
+          </div>
         </div>
 
         <div className="landing__seo">
@@ -88,10 +113,124 @@ export default function LandingPage({
           </details>
         </div>
 
-        <p className="note">
-          made by izzmirsuhaimi. The Scheduler-inator! is not affiliated with, endorsed
-          by, or connected to Disney or Phineas and Ferb.
-        </p>
+        <details className="landing__faq">
+          <summary>Free tools</summary>
+          <ul className="landing__seo-list">
+            <li>
+              <a href="/">Timetable Wallpaper Maker</a> — turn your class schedule into a
+              wallpaper.
+            </li>
+            <li>
+              <a href="/tools/pomodoro.html">Pomodoro Timer</a> — 25-minute focus
+              sessions.
+            </li>
+            <li>
+              <a href="/tools/gpa-calculator.html">GPA / Grade Calculator</a> — 4.0 scale
+              GPA.
+            </li>
+            <li>
+              <a href="/tools/budget-planner.html">Budget Planner (50/30/20)</a> — split
+              income into needs, wants, savings.
+            </li>
+            <li>
+              <a href="/tools/asb-calculator.html">ASB Investment Calculator (Malaysia)</a>{" "}
+              — project ASB dividends and growth.
+            </li>
+            <li>
+              <a href="/tools/compound-interest.html">Compound Interest Calculator</a> —
+              growth over time.
+            </li>
+            <li>
+              <a href="/tools/savings-goal.html">Savings Goal Calculator</a> — monthly
+              savings needed.
+            </li>
+            <li>
+              <a href="/tools/loan-calculator.html">Loan / EMI Calculator</a> — monthly
+              payment and total interest.
+            </li>
+            <li>
+              <a href="/tools/emergency-fund.html">Emergency Fund Calculator</a> — target
+              and monthly savings.
+            </li>
+            <li>
+              <a href="/tools/unit-converter.html">Unit Converter</a> — length, weight,
+              temperature, and more.
+            </li>
+            <li>
+              <a href="/tools/date-difference.html">Date Difference Calculator</a> — days
+              between two dates.
+            </li>
+            <li>
+              <a href="/tools/word-counter.html">Word Counter</a> — words, characters,
+              reading time.
+            </li>
+            <li>
+              <a href="/tools/qr-code-generator.html">QR Code Generator</a> — create and
+              download QR codes.
+            </li>
+            <li>
+              <a href="/tools/">All tools</a>
+            </li>
+          </ul>
+        </details>
+
+        <details className="landing__faq">
+          <summary>Malaysia-focused tools</summary>
+          <ul className="landing__seo-list">
+            <li>
+              <a href="/tools/epf-calculator.html">EPF (KWSP) Calculator</a> — retirement
+              savings projection.
+            </li>
+            <li>
+              <a href="/tools/income-tax-calculator.html">Income Tax Calculator</a> — LHDN
+              tax brackets.
+            </li>
+            <li>
+              <a href="/tools/zakat-calculator.html">Zakat Calculator</a> — harta, pendapatan,
+              fitrah.
+            </li>
+            <li>
+              <a href="/tools/car-loan-calculator.html">Car Loan Calculator</a> — new
+              reducing-balance (EIR) method.
+            </li>
+          </ul>
+        </details>
+
+        <details className="landing__faq">
+          <summary>Guides</summary>
+          <ul className="landing__seo-list">
+            <li>
+              <a href="/guides/how-to-make-timetable-wallpaper.html">
+                How to make a timetable wallpaper
+              </a>
+            </li>
+            <li>
+              <a href="/guides/best-study-schedule.html">Best study schedule for students</a>
+            </li>
+            <li>
+              <a href="/guides/phone-wallpaper-sizes.html">Phone wallpaper sizes cheat sheet</a>
+            </li>
+            <li>
+              <a href="/guides/">All guides</a>
+            </li>
+          </ul>
+        </details>
+
+        <footer className="landing__footer">
+          <nav className="landing__footer-nav">
+            <a href="/privacy.html">Privacy</a>
+            <a href="/terms.html">Terms</a>
+            <a href="/about.html">About</a>
+            <a href="/contact.html">Contact</a>
+            <a href="/guides/">Guides</a>
+            <a href="/tools/">Tools</a>
+            <a href="/whats-new.html">What's new</a>
+          </nav>
+          <p className="note">
+            made by izzmirsuhaimi. The Scheduler-inator! is not affiliated with, endorsed
+            by, or connected to Disney or Phineas and Ferb.
+          </p>
+        </footer>
       </div>
     </div>
   );

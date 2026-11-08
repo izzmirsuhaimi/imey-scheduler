@@ -50,7 +50,12 @@ export default function App() {
   const [showSettings, setShowSettings] = useState(false);
   const [showCropper, setShowCropper] = useState(false);
   const [showResetConfirm, setShowResetConfirm] = useState(false);
-  const [showLanding, setShowLanding] = useState(false);
+  const [showLanding, setShowLanding] = useState(() => {
+    if (typeof window === "undefined") return false;
+    const hash = window.location.hash.replace(/^#/, "");
+    const params = new URLSearchParams(window.location.search);
+    return hash === "landing" || params.get("landing") === "1";
+  });
 
   const { theme, toggleTheme } = useTheme();
 
@@ -77,6 +82,19 @@ export default function App() {
   useEffect(() => {
     if (showSettings) setPreviewSettings(settings);
   }, [showSettings, settings]);
+
+  useEffect(() => {
+    const showLandingFromUrl = () => {
+      const hash = window.location.hash.replace(/^#/, "");
+      const params = new URLSearchParams(window.location.search);
+      if (hash === "landing" || params.get("landing") === "1") {
+        setShowLanding(true);
+      }
+    };
+    showLandingFromUrl();
+    window.addEventListener("hashchange", showLandingFromUrl);
+    return () => window.removeEventListener("hashchange", showLandingFromUrl);
+  }, []);
 
   useEffect(() => {
     const savedDevice = device
@@ -184,6 +202,9 @@ export default function App() {
           if (!selected) return;
           setDevice(selected);
           setShowLanding(false);
+          if (window.location.hash) {
+            window.history.replaceState(null, "", window.location.pathname + window.location.search);
+          }
         }}
       />
     );

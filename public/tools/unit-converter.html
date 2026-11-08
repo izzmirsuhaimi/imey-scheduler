@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Unit Converter — The Scheduler-inator!</title>
+  <meta name="description" content="Free unit converter: length, weight, temperature, volume, area, speed, and time." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://scheduler-inator.site/tools/unit-converter.html" />
+  <link rel="stylesheet" href="/site.css" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5634929249074016" crossorigin="anonymous"></script>
+  <script>
+    (function () {
+      try {
+        var stored = JSON.parse(localStorage.getItem("imey_scheduler:theme"));
+        if (stored !== "light" && stored !== "dark") {
+          stored = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        }
+        document.documentElement.dataset.theme = stored;
+      } catch (e) {}
+    })();
+  </script>
+  <script src="/site.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/#landing">The Scheduler-inator!</a>
+    <div class="header-right">
+      <nav class="site-nav">
+        <a href="/#landing">Home</a>
+        <a href="/guides/">Guides</a>
+        <a href="/tools/">Tools</a>
+        <a href="/about.html">About</a>
+        <a href="/contact.html">Contact</a>
+      </nav>
+      <button class="theme-toggle" type="button" aria-label="Toggle theme" role="switch" aria-checked="false">
+        <span class="theme-toggle__track" aria-hidden="true"><span class="theme-toggle__knob">
+          <svg class="icon-sun" viewBox="0 0 20 20" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M10 14a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0-11a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 10 3Zm0 11.75a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5a.75.75 0 0 1 .75-.75ZM16.25 10a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5a.75.75 0 0 1 .75.75ZM6 10a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 6 10Zm8.53-3.97a.75.75 0 0 1 0 1.06l-1.06 1.06a.75.75 0 1 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0Zm-6.54 6.02a.75.75 0 0 1 0 1.06l-1.06 1.06a.75.75 0 0 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0Zm7.6-1.6a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5a.75.75 0 0 1 .75.75ZM6.54 5.2a.75.75 0 0 1 0 1.06L5.48 7.32a.75.75 0 1 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0Z"/></svg>
+          <svg class="icon-moon" viewBox="0 0 20 20" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M14.28 12.44a6.5 6.5 0 0 1-8.72-8.72.75.75 0 0 0-.95-.99A8 8 0 1 0 15.27 14.6a.75.75 0 0 0-.99-.95Z"/></svg>
+        </span></span>
+        <span class="theme-toggle__label">Light</span>
+      </button>
+    </div>
+  </header>
+  <main class="container">
+    <p class="breadcrumbs"><a href="/#landing">Home</a> / <a href="/tools/">Tools</a> / Unit converter</p>
+    <h1>Unit Converter</h1>
+    <p class="muted">Convert between common units of length, weight, temperature, volume, area, speed, and time.</p>
+
+    <div class="card">
+      <div class="calc-grid">
+        <label for="category">Category</label>
+        <select id="category"></select>
+        <label for="fromUnit">From</label>
+        <select id="fromUnit"></select>
+        <label for="toUnit">To</label>
+        <select id="toUnit"></select>
+        <label for="value">Value</label>
+        <input id="value" type="number" value="1" step="any" />
+      </div>
+      <div class="result" id="result" style="margin-top:14px">
+        <p>Result: <strong id="resultVal">—</strong></p>
+      </div>
+    </div>
+    <div class="disclaimer">For educational purposes only.</div>
+  </main>
+  <footer class="site-footer">
+    <span>&copy; 2026 The Scheduler-inator! by izzmirsuhaimi</span>
+    <nav>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+      <a href="/about.html">About</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/guides/">Guides</a>
+      <a href="/whats-new.html">What's new</a>
+    </nav>
+  </footer>
+  <script>
+    // Conversion factors relative to base unit
+    var categories = {
+      Length: { base: 'm', units: { m:1, km:1000, cm:0.01, mm:0.001, mi:1609.344, yd:0.9144, ft:0.3048, in:0.0254 } },
+      Weight: { base: 'kg', units: { kg:1, g:0.001, mg:0.000001, lb:0.45359237, oz:0.0283495231, ton:1000 } },
+      Volume: { base: 'L', units: { L:1, mL:0.001, gal:3.78541, qt:0.946353, pt:0.473176, cup:0.236588, fl_oz:0.0295735 } },
+      Area: { base: 'm2', units: { 'm2':1, 'km2':1e6, 'cm2':1e-4, 'ft2':0.092903, 'in2':0.00064516, acre:4046.86, hectare:10000 } },
+      Speed: { base: 'm/s', units: { 'm/s':1, 'km/h':0.277778, mph:0.44704, knot:0.514444 } },
+      Time: { base: 's', units: { s:1, min:60, h:3600, day:86400, week:604800, month:2629800, year:31557600 } }
+    };
+    function populateUnits(cat) {
+      var units = Object.keys(categories[cat].units);
+      var from = document.getElementById('fromUnit');
+      var to = document.getElementById('toUnit');
+      from.innerHTML = ''; to.innerHTML = '';
+      units.forEach(function (u) {
+        var o1 = document.createElement('option'); o1.value = u; o1.textContent = u; from.appendChild(o1);
+        var o2 = document.createElement('option'); o2.value = u; o2.textContent = u; to.appendChild(o2);
+      });
+      from.value = units[0];
+      to.value = units[1] || units[0];
+    }
+    function populateCategories() {
+      var sel = document.getElementById('category');
+      Object.keys(categories).forEach(function (c) {
+        // add Temperature separately
+      });
+      ['Length','Weight','Temperature','Volume','Area','Speed','Time'].forEach(function (c) {
+        var o = document.createElement('option'); o.value = c; o.textContent = c; sel.appendChild(o);
+      });
+    }
+    function convert() {
+      const cat = document.getElementById('category').value;
+      const from = document.getElementById('fromUnit').value;
+      const to = document.getElementById('toUnit').value;
+      const val = parseFloat(document.getElementById('value').value);
+      if (isNaN(val)) { document.getElementById('resultVal').textContent = '—'; return; }
+      let result;
+      if (cat === 'Temperature') {
+        // convert to celsius first
+        let c;
+        if (from === 'C') c = val;
+        else if (from === 'F') c = (val - 32) * 5 / 9;
+        else if (from === 'K') c = val - 273.15;
+        if (to === 'C') result = c;
+        else if (to === 'F') result = c * 9 / 5 + 32;
+        else if (to === 'K') result = c + 273.15;
+      } else {
+        const units = categories[cat].units;
+        const base = val * units[from];
+        result = base / units[to];
+      }
+      document.getElementById('resultVal').textContent = result.toLocaleString(undefined, { maximumFractionDigits: 6 }) + ' ' + to;
+    }
+    populateCategories();
+    // temperature units
+    var origPopulate = populateUnits;
+    document.getElementById('category').addEventListener('change', function () {
+      const cat = this.value;
+      const from = document.getElementById('fromUnit');
+      const to = document.getElementById('toUnit');
+      from.innerHTML = ''; to.innerHTML = '';
+      let units;
+      if (cat === 'Temperature') units = ['C','F','K'];
+      else units = Object.keys(categories[cat].units);
+      units.forEach(function (u) {
+        var o1 = document.createElement('option'); o1.value = u; o1.textContent = u; from.appendChild(o1);
+        var o2 = document.createElement('option'); o2.value = u; o2.textContent = u; to.appendChild(o2);
+      });
+      from.value = units[0];
+      to.value = units[1] || units[0];
+      convert();
+    });
+    document.getElementById('fromUnit').addEventListener('change', convert);
+    document.getElementById('toUnit').addEventListener('change', convert);
+    document.getElementById('value').addEventListener('input', convert);
+    document.getElementById('category').value = 'Length';
+    document.getElementById('category').dispatchEvent(new Event('change'));
+  </script>
+</body>
+</html>

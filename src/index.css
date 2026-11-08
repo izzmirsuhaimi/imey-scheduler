@@ -1011,6 +1011,33 @@ body {
   --danger-bg: #fee2e2;
   --danger-edge: #fecaca;
 }
+/* Landing: resources + footer */
+.landing__resources {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--edge);
+}
+.landing__footer {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--edge);
+}
+.landing__footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+.landing__footer-nav a {
+  color: var(--muted);
+  text-decoration: none;
+}
+.landing__footer-nav a:hover {
+  color: var(--text);
+  text-decoration: underline;
+}
+
 [data-theme="dark"] {
   color-scheme: dark;
   --brand: #e7e9ea;
