@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ASB Investment Calculator (Malaysia) — The Scheduler-inator!</title>
+  <meta name="description" content="Free ASB (Amanah Saham Bumiputera) calculator: project your dividends, see how long to reach the RM300,000 cap, and chart your growth." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://scheduler-inator.site/tools/asb-calculator.html" />
+  <link rel="stylesheet" href="/site.css" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5634929249074016" crossorigin="anonymous"></script>
+  <script>
+    (function () {
+      try {
+        var stored = JSON.parse(localStorage.getItem("imey_scheduler:theme"));
+        if (stored !== "light" && stored !== "dark") {
+          stored = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        }
+        document.documentElement.dataset.theme = stored;
+      } catch (e) {}
+    })();
+  </script>
+  <script src="/site.js" defer></script>
+  <style>
+    .chart-wrap { margin: 16px 0; }
+    .chart-legend { display: flex; gap: 16px; font-size: 13px; color: var(--muted); margin-bottom: 8px; flex-wrap: wrap; }
+    .legend-swatch { display: inline-block; width: 12px; height: 12px; border-radius: 2px; margin-right: 6px; vertical-align: middle; }
+    svg.asb-chart { width: 100%; height: auto; background: var(--control-bg); border: 1px solid var(--edge); border-radius: 12px; }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/#landing">The Scheduler-inator!</a>
+    <div class="header-right">
+      <nav class="site-nav">
+        <a href="/#landing">Home</a>
+        <a href="/guides/">Guides</a>
+        <a href="/tools/">Tools</a>
+        <a href="/about.html">About</a>
+        <a href="/contact.html">Contact</a>
+      </nav>
+      <button class="theme-toggle" type="button" aria-label="Toggle theme" role="switch" aria-checked="false">
+        <span class="theme-toggle__track" aria-hidden="true">
+          <span class="theme-toggle__knob">
+            <svg class="icon-sun" viewBox="0 0 20 20" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M10 14a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0-11a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 10 3Zm0 11.75a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5a.75.75 0 0 1 .75-.75ZM16.25 10a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5a.75.75 0 0 1 .75.75ZM6 10a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 6 10Zm8.53-3.97a.75.75 0 0 1 0 1.06l-1.06 1.06a.75.75 0 1 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0Zm-6.54 6.02a.75.75 0 0 1 0 1.06l-1.06 1.06a.75.75 0 0 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0Zm7.6-1.6a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5a.75.75 0 0 1 .75.75ZM6.54 5.2a.75.75 0 0 1 0 1.06L5.48 7.32a.75.75 0 1 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0Z"/></svg>
+            <svg class="icon-moon" viewBox="0 0 20 20" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M14.28 12.44a6.5 6.5 0 0 1-8.72-8.72.75.75 0 0 0-.95-.99A8 8 0 1 0 15.27 14.6a.75.75 0 0 0-.99-.95Z"/></svg>
+          </span>
+        </span>
+        <span class="theme-toggle__label">Light</span>
+      </button>
+    </div>
+  </header>
+  <main class="container">
+    <p class="breadcrumbs"><a href="/#landing">Home</a> / <a href="/tools/">Tools</a> / ASB calculator</p>
+    <h1>ASB Investment Calculator</h1>
+    <p class="muted">Project your Amanah Saham Bumiputera (ASB) growth, dividends, and time to reach the investment cap.</p>
+
+    <div class="card">
+      <h3>What is ASB?</h3>
+      <p>Amanah Saham Bumiputera (ASB) is a unit trust fund managed by <strong>Permodalan Nasional Berhad (PNB)</strong>, primarily for Bumiputera Malaysians. Units are priced at a fixed RM1.00, with no sales charge. Dividends are declared annually (typically in December/January) and are usually reinvested, so your money compounds. ASB is considered low-risk and government-linked. ASB financing is also offered by most banks.</p>
+      <p class="small"><strong>Fact check:</strong> The individual investment cap was raised from RM200,000 to <strong>RM300,000</strong> (effective 2023). Dividends are based on the lowest balance in each month, so this calculator uses a simplified monthly-compounding estimate.</p>
+    </div>
+
+    <div class="card">
+      <div class="calc-grid">
+        <label for="current">Current invested amount (RM)</label>
+        <input id="current" type="number" value="10000" min="0" step="100" />
+        <label for="monthly">Monthly contribution (RM)</label>
+        <input id="monthly" type="number" value="500" min="0" step="50" />
+        <label for="years">Projection period (years)</label>
+        <input id="years" type="number" value="10" min="1" max="40" step="1" />
+        <label for="rate">Estimated annual dividend (%)</label>
+        <input id="rate" type="number" value="6" min="0" step="0.1" />
+        <label for="cap">Max investment cap (RM)</label>
+        <input id="cap" type="number" value="300000" min="1000" step="1000" />
+      </div>
+      <button class="btn btn--primary" id="calcBtn" style="margin-top:14px">Calculate</button>
+
+      <div class="result" id="result">
+        <p>Projected value: <strong id="value">RM 0.00</strong></p>
+        <p>Total contributions: <strong id="contrib">RM 0.00</strong></p>
+        <p>Total dividends earned: <strong id="dividends">RM 0.00</strong></p>
+        <p>Time to reach cap: <strong id="toCap">—</strong></p>
+      </div>
+
+      <div class="chart-wrap">
+        <div class="chart-legend">
+          <span><span class="legend-swatch" style="background:#3b82f6"></span>Cumulative contributions (principal)</span>
+          <span><span class="legend-swatch" style="background:#10b981"></span>Total value (with dividends)</span>
+        </div>
+        <svg class="asb-chart" id="chart" viewBox="0 0 600 260" preserveAspectRatio="none"></svg>
+      </div>
+    </div>
+
+    <div class="disclaimer">Disclaimer: For educational and illustrative purposes only. ASB dividends are not guaranteed and vary each year. This calculator uses a simplified monthly-compounding estimate; actual ASB dividends are based on the lowest monthly balance. Not financial advice. Consult a qualified financial professional before investing.</div>
+  </main>
+  <footer class="site-footer">
+    <span>&copy; 2026 The Scheduler-inator! by izzmirsuhaimi</span>
+    <nav>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+      <a href="/about.html">About</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/guides/">Guides</a>
+      <a href="/whats-new.html">What's new</a>
+    </nav>
+  </footer>
+  <script>
+    function money(x) { return 'RM ' + x.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+    function calculate() {
+      const current = parseFloat(document.getElementById('current').value) || 0;
+      const monthly = parseFloat(document.getElementById('monthly').value) || 0;
+      const years = parseInt(document.getElementById('years').value, 10) || 1;
+      const rate = (parseFloat(document.getElementById('rate').value) || 0) / 100;
+      const cap = parseFloat(document.getElementById('cap').value) || 300000;
+      const months = years * 12;
+      const mr = rate / 12;
+
+      // simulate
+      const principalArr = [Math.min(current, cap)];
+      const valueArr = [Math.min(current, cap)];
+      let principal = Math.min(current, cap);
+      let value = Math.min(current, cap);
+      let monthsToCap = null;
+      if (principal >= cap) monthsToCap = 0;
+
+      for (let i = 1; i <= months; i++) {
+        // dividend accrual on existing value
+        value = value * (1 + mr);
+        // contribution if under cap
+        if (principal < cap) {
+          const room = cap - principal;
+          const contrib = Math.min(monthly, room);
+          principal += contrib;
+          value += contrib;
+          if (principal >= cap - 1e-9 && monthsToCap === null) monthsToCap = i;
+        }
+        principalArr.push(principal);
+        valueArr.push(value);
+      }
+
+      const totalContrib = principalArr[principalArr.length - 1];
+      const totalDividends = value - totalContrib + (current - Math.min(current, cap)); // approx
+      // more accurate dividends:
+      const dividends = value - (Math.min(current, cap) + monthly * months) + Math.max(0, (Math.min(current,cap) + monthly*months) - cap) * 0; 
+      // simpler: dividends = final value - total principal contributed
+      const principalContributed = Math.min(current, cap) + Math.min(monthly * months, Math.max(0, cap - Math.min(current, cap)));
+      const divAccurate = value - principalContributed;
+
+      document.getElementById('value').textContent = money(value);
+      document.getElementById('contrib').textContent = money(principalContributed);
+      document.getElementById('dividends').textContent = money(Math.max(0, divAccurate));
+      if (monthsToCap === null) {
+        document.getElementById('toCap').textContent = 'Not reached within ' + years + ' years';
+      } else if (monthsToCap === 0) {
+        document.getElementById('toCap').textContent = 'Already at cap';
+      } else {
+        const y = Math.floor(monthsToCap / 12);
+        const m = monthsToCap % 12;
+        document.getElementById('toCap').textContent = y + ' yr ' + m + ' mo';
+      }
+
+      drawChart(principalArr, valueArr);
+    }
+
+    function drawChart(principalArr, valueArr) {
+      const svg = document.getElementById('chart');
+      const W = 600, H = 260;
+      const padL = 50, padR = 20, padT = 20, padB = 30;
+      const plotW = W - padL - padR;
+      const plotH = H - padT - padB;
+      const n = principalArr.length - 1;
+      const maxY = Math.max(valueArr[valueArr.length - 1], principalArr[principalArr.length - 1]) * 1.05 || 1;
+      const minY = 0;
+
+      function x(i) { return padL + (i / n) * plotW; }
+      function y(v) { return padT + plotH - ((v - minY) / (maxY - minY)) * plotH; }
+
+      // grid lines (5)
+      let grid = '';
+      for (let g = 0; g <= 4; g++) {
+        const val = (maxY / 4) * g;
+        const yy = y(val);
+        grid += '<line x1="' + padL + '" y1="' + yy + '" x2="' + (W - padR) + '" y2="' + yy + '" stroke="var(--edge)" stroke-width="1"/>';
+        grid += '<text x="' + (padL - 6) + '" y="' + (yy + 4) + '" text-anchor="end" font-size="10" fill="var(--muted)">' + (val / 1000).toFixed(0) + 'k</text>';
+      }
+      // x-axis labels (years)
+      let xlabels = '';
+      const step = Math.max(1, Math.floor(n / 12 / 5)) || 1;
+      // show every year
+      const yearsCount = Math.floor(n / 12);
+      for (let yr = 0; yr <= yearsCount; yr++) {
+        const i = yr * 12;
+        if (i > n) break;
+        xlabels += '<text x="' + x(i) + '" y="' + (H - 8) + '" text-anchor="middle" font-size="10" fill="var(--muted)">' + yr + '</text>';
+      }
+
+      // polylines
+      let pPoints = principalArr.map(function (v, i) { return x(i) + ',' + y(v); }).join(' ');
+      let vPoints = valueArr.map(function (v, i) { return x(i) + ',' + y(v); }).join(' ');
+
+      svg.innerHTML =
+        grid +
+        xlabels +
+        '<polyline points="' + pPoints + '" fill="none" stroke="#3b82f6" stroke-width="2"/>' +
+        '<polyline points="' + vPoints + '" fill="none" stroke="#10b981" stroke-width="2"/>' +
+        '<text x="' + (W/2) + '" y="14" text-anchor="middle" font-size="11" fill="var(--muted)">Years</text>';
+    }
+
+    document.getElementById('calcBtn').addEventListener('click', calculate);
+    ['current','monthly','years','rate','cap'].forEach(function (id) {
+      document.getElementById(id).addEventListener('input', calculate);
+    });
+    calculate();
+  </script>
+</body>
+</html>

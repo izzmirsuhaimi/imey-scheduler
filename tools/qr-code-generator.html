@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QR Code Generator — The Scheduler-inator!</title>
+  <meta name="description" content="Free QR code generator: create QR codes for URLs, text, Wi-Fi, and more, then download as PNG." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://scheduler-inator.site/tools/qr-code-generator.html" />
+  <link rel="stylesheet" href="/site.css" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5634929249074016" crossorigin="anonymous"></script>
+  <script>
+    (function () {
+      try {
+        var stored = JSON.parse(localStorage.getItem("imey_scheduler:theme"));
+        if (stored !== "light" && stored !== "dark") {
+          stored = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        }
+        document.documentElement.dataset.theme = stored;
+      } catch (e) {}
+    })();
+  </script>
+  <script src="/site.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/#landing">The Scheduler-inator!</a>
+    <div class="header-right">
+      <nav class="site-nav">
+        <a href="/#landing">Home</a>
+        <a href="/guides/">Guides</a>
+        <a href="/tools/">Tools</a>
+        <a href="/about.html">About</a>
+        <a href="/contact.html">Contact</a>
+      </nav>
+      <button class="theme-toggle" type="button" aria-label="Toggle theme" role="switch" aria-checked="false">
+        <span class="theme-toggle__track" aria-hidden="true"><span class="theme-toggle__knob">
+          <svg class="icon-sun" viewBox="0 0 20 20" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M10 14a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0-11a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 10 3Zm0 11.75a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5a.75.75 0 0 1 .75-.75ZM16.25 10a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5a.75.75 0 0 1 .75.75ZM6 10a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 6 10Zm8.53-3.97a.75.75 0 0 1 0 1.06l-1.06 1.06a.75.75 0 1 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0Zm-6.54 6.02a.75.75 0 0 1 0 1.06l-1.06 1.06a.75.75 0 0 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0Zm7.6-1.6a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5a.75.75 0 0 1 .75.75ZM6.54 5.2a.75.75 0 0 1 0 1.06L5.48 7.32a.75.75 0 1 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0Z"/></svg>
+          <svg class="icon-moon" viewBox="0 0 20 20" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M14.28 12.44a6.5 6.5 0 0 1-8.72-8.72.75.75 0 0 0-.95-.99A8 8 0 1 0 15.27 14.6a.75.75 0 0 0-.99-.95Z"/></svg>
+        </span></span>
+        <span class="theme-toggle__label">Light</span>
+      </button>
+    </div>
+  </header>
+  <main class="container">
+    <p class="breadcrumbs"><a href="/#landing">Home</a> / <a href="/tools/">Tools</a> / QR code generator</p>
+    <h1>QR Code Generator</h1>
+    <p class="muted">Generate a QR code for a URL, text, or any content, then download as PNG.</p>
+
+    <div class="card">
+      <div class="calc-grid">
+        <label for="qrText">Content (URL or text)</label>
+        <input id="qrText" type="text" value="https://scheduler-inator.site/" />
+        <label for="qrSize">Size (px)</label>
+        <input id="qrSize" type="number" value="256" min="64" max="512" step="32" />
+      </div>
+      <button class="btn btn--primary" id="genBtn" style="margin-top:14px">Generate</button>
+      <div id="qrcode" style="margin-top:16px;display:flex;justify-content:center"></div>
+      <div class="card__row" style="justify-content:center;margin-top:12px">
+        <button class="btn" id="dlBtn">Download PNG</button>
+      </div>
+    </div>
+    <div class="disclaimer">Runs in your browser. The QR library is loaded from a CDN (cdnjs); an internet connection is required.</div>
+  </main>
+  <footer class="site-footer">
+    <span>&copy; 2026 The Scheduler-inator! by izzmirsuhaimi</span>
+    <nav>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+      <a href="/about.html">About</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/guides/">Guides</a>
+      <a href="/whats-new.html">What's new</a>
+    </nav>
+  </footer>
+  <script>
+    var qrInstance = null;
+    function generate() {
+      const text = document.getElementById('qrText').value || ' ';
+      const size = parseInt(document.getElementById('qrSize').value, 10) || 256;
+      const container = document.getElementById('qrcode');
+      container.innerHTML = '';
+      if (typeof QRCode === 'undefined') {
+        container.textContent = 'QR library failed to load. Check your connection.';
+        return;
+      }
+      qrInstance = new QRCode(container, {
+        text: text,
+        width: size,
+        height: size,
+        colorDark: '#000000',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.M
+      });
+    }
+    function download() {
+      const canvas = document.querySelector('#qrcode canvas');
+      if (!canvas) { alert('Generate a QR code first.'); return; }
+      const link = document.createElement('a');
+      link.download = 'qrcode.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+    document.getElementById('genBtn').addEventListener('click', generate);
+    document.getElementById('dlBtn').addEventListener('click', download);
+    generate();
+  </script>
+</body>
+</html>

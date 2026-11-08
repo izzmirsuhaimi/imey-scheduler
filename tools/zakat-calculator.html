@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Zakat Calculator Malaysia — The Scheduler-inator!</title>
+  <meta name="description" content="Free zakat calculator Malaysia: zakat harta (wealth), zakat pendapatan (income), and zakat fitrah." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://scheduler-inator.site/tools/zakat-calculator.html" />
+  <link rel="stylesheet" href="/site.css" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5634929249074016" crossorigin="anonymous"></script>
+  <script>
+    (function () {
+      try {
+        var stored = JSON.parse(localStorage.getItem("imey_scheduler:theme"));
+        if (stored !== "light" && stored !== "dark") {
+          stored = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        }
+        document.documentElement.dataset.theme = stored;
+      } catch (e) {}
+    })();
+  </script>
+  <script src="/site.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/#landing">The Scheduler-inator!</a>
+    <div class="header-right">
+      <nav class="site-nav">
+        <a href="/#landing">Home</a>
+        <a href="/guides/">Guides</a>
+        <a href="/tools/">Tools</a>
+        <a href="/about.html">About</a>
+        <a href="/contact.html">Contact</a>
+      </nav>
+      <button class="theme-toggle" type="button" aria-label="Toggle theme" role="switch" aria-checked="false">
+        <span class="theme-toggle__track" aria-hidden="true">
+          <span class="theme-toggle__knob">
+            <svg class="icon-sun" viewBox="0 0 20 20" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M10 14a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0-11a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 10 3Zm0 11.75a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5a.75.75 0 0 1 .75-.75ZM16.25 10a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5a.75.75 0 0 1 .75.75ZM6 10a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 6 10Zm8.53-3.97a.75.75 0 0 1 0 1.06l-1.06 1.06a.75.75 0 1 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0Zm-6.54 6.02a.75.75 0 0 1 0 1.06l-1.06 1.06a.75.75 0 0 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0Zm7.6-1.6a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5a.75.75 0 0 1 .75.75ZM6.54 5.2a.75.75 0 0 1 0 1.06L5.48 7.32a.75.75 0 1 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0Z"/></svg>
+            <svg class="icon-moon" viewBox="0 0 20 20" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M14.28 12.44a6.5 6.5 0 0 1-8.72-8.72.75.75 0 0 0-.95-.99A8 8 0 1 0 15.27 14.6a.75.75 0 0 0-.99-.95Z"/></svg>
+          </span>
+        </span>
+        <span class="theme-toggle__label">Light</span>
+      </button>
+    </div>
+  </header>
+  <main class="container">
+    <p class="breadcrumbs"><a href="/#landing">Home</a> / <a href="/tools/">Tools</a> / Zakat</p>
+    <h1>Zakat Calculator — Malaysia</h1>
+    <p class="muted">Estimate zakat harta (wealth), zakat pendapatan (income), and zakat fitrah.</p>
+
+    <div class="card">
+      <h3>Zakat harta (wealth)</h3>
+      <p class="small">Zakat is 2.5% of zakatable wealth if it exceeds the nisab (85g of gold). Nisab is computed from the gold price per gram.</p>
+      <div class="calc-grid">
+        <label for="goldPrice">Gold price per gram (RM)</label>
+        <input id="goldPrice" type="number" value="330" min="0" step="1" />
+        <label for="cash">Cash &amp; savings (RM)</label>
+        <input id="cash" type="number" value="20000" min="0" step="100" />
+        <label for="invest">Investments / EPF (RM)</label>
+        <input id="invest" type="number" value="10000" min="0" step="100" />
+        <label for="gold">Gold &amp; silver value (RM)</label>
+        <input id="gold" type="number" value="0" min="0" step="100" />
+        <label for="business">Business assets (RM)</label>
+        <input id="business" type="number" value="0" min="0" step="100" />
+        <label for="debts">Debts (RM)</label>
+        <input id="debts" type="number" value="0" min="0" step="100" />
+      </div>
+      <button class="btn btn--primary" id="calcHarta" style="margin-top:14px">Calculate</button>
+      <div class="result" id="resHarta">
+        <p>Nisab (85g gold): <strong id="nisab">RM 0.00</strong></p>
+        <p>Total zakatable wealth: <strong id="totalWealth">RM 0.00</strong></p>
+        <p>Zakat harta (2.5%): <strong id="zakatHarta">RM 0.00</strong></p>
+        <p class="small" id="hartaNote"></p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Zakat pendapatan (income)</h3>
+      <p class="small">2.5% of net annual income after basic needs, if it exceeds the nisab.</p>
+      <div class="calc-grid">
+        <label for="monthlyIncome">Monthly gross income (RM)</label>
+        <input id="monthlyIncome" type="number" value="5000" min="0" step="50" />
+        <label for="monthlyExp">Monthly basic expenses (RM)</label>
+        <input id="monthlyExp" type="number" value="3000" min="0" step="50" />
+      </div>
+      <button class="btn btn--primary" id="calcPendapatan" style="margin-top:14px">Calculate</button>
+      <div class="result" id="resPendapatan">
+        <p>Net annual income: <strong id="netAnnual">RM 0.00</strong></p>
+        <p>Zakat pendapatan (2.5%): <strong id="zakatPendapatan">RM 0.00</strong></p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Zakat fitrah</h3>
+      <p class="small">Zakat fitrah is paid per person. Amount varies by state (typically RM7–RM15 in Malaysia).</p>
+      <div class="calc-grid">
+        <label for="fitrahPersons">Number of persons</label>
+        <input id="fitrahPersons" type="number" value="1" min="1" step="1" />
+        <label for="fitrahAmount">Amount per person (RM)</label>
+        <input id="fitrahAmount" type="number" value="7" min="1" step="0.5" />
+      </div>
+      <button class="btn btn--primary" id="calcFitrah" style="margin-top:14px">Calculate</button>
+      <div class="result" id="resFitrah">
+        <p>Total zakat fitrah: <strong id="totalFitrah">RM 0.00</strong></p>
+      </div>
+    </div>
+
+    <div class="disclaimer">Disclaimer: For educational purposes only. Zakat rates and nisab values vary by state and year; consult your state zakat authority (e.g., LZNK, PPZ-MAIWP) for official amounts. Not religious/financial advice.</div>
+  </main>
+  <footer class="site-footer">
+    <span>&copy; 2026 The Scheduler-inator! by izzmirsuhaimi</span>
+    <nav>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+      <a href="/about.html">About</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/guides/">Guides</a>
+      <a href="/whats-new.html">What's new</a>
+    </nav>
+  </footer>
+  <script>
+    function money(x) { return 'RM ' + x.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+    function calcHarta() {
+      const goldPrice = parseFloat(document.getElementById('goldPrice').value) || 0;
+      const nisab = goldPrice * 85;
+      const cash = parseFloat(document.getElementById('cash').value) || 0;
+      const invest = parseFloat(document.getElementById('invest').value) || 0;
+      const gold = parseFloat(document.getElementById('gold').value) || 0;
+      const business = parseFloat(document.getElementById('business').value) || 0;
+      const debts = parseFloat(document.getElementById('debts').value) || 0;
+      const total = cash + invest + gold + business - debts;
+      document.getElementById('nisab').textContent = money(nisab);
+      document.getElementById('totalWealth').textContent = money(Math.max(0, total));
+      let zakat = 0, note = '';
+      if (total >= nisab) {
+        zakat = total * 0.025;
+        note = 'Wealth exceeds nisab — zakat is due.';
+      } else {
+        note = 'Wealth below nisab — no zakat harta due.';
+      }
+      document.getElementById('zakatHarta').textContent = money(zakat);
+      document.getElementById('hartaNote').textContent = note;
+    }
+    function calcPendapatan() {
+      const inc = parseFloat(document.getElementById('monthlyIncome').value) || 0;
+      const exp = parseFloat(document.getElementById('monthlyExp').value) || 0;
+      const netAnnual = (inc - exp) * 12;
+      const zakat = netAnnual > 0 ? netAnnual * 0.025 : 0;
+      document.getElementById('netAnnual').textContent = money(Math.max(0, netAnnual));
+      document.getElementById('zakatPendapatan').textContent = money(Math.max(0, zakat));
+    }
+    function calcFitrah() {
+      const persons = parseInt(document.getElementById('fitrahPersons').value, 10) || 1;
+      const amt = parseFloat(document.getElementById('fitrahAmount').value) || 0;
+      document.getElementById('totalFitrah').textContent = money(persons * amt);
+    }
+    document.getElementById('calcHarta').addEventListener('click', calcHarta);
+    document.getElementById('calcPendapatan').addEventListener('click', calcPendapatan);
+    document.getElementById('calcFitrah').addEventListener('click', calcFitrah);
+    ['goldPrice','cash','invest','gold','business','debts'].forEach(function (id) {
+      document.getElementById(id).addEventListener('input', calcHarta);
+    });
+    ['monthlyIncome','monthlyExp'].forEach(function (id) {
+      document.getElementById(id).addEventListener('input', calcPendapatan);
+    });
+    ['fitrahPersons','fitrahAmount'].forEach(function (id) {
+      document.getElementById(id).addEventListener('input', calcFitrah);
+    });
+    calcHarta(); calcPendapatan(); calcFitrah();
+  </script>
+</body>
+</html>
